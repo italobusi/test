@@ -24,10 +24,29 @@ venue:
   latest: "https://italobusi.github.io/test/draft-zheng-ccamp-client-pm-yang.html"
 
 author:
- -
-    fullname: "italobusi"
-    organization: Your Organization Here
-    email: "italo.busi@huawei.com"
+  -
+    name: Haomian Zheng
+    org: Huawei Technologies
+    street: H1, Huawei Xiliu Beipo Village, Songshan Lake
+    city: Dongguan
+    region: Guangdong
+    code: 523808
+    country: China
+    email: zhenghaomian@huawei.com
+  -
+    name: Italo Busi
+    org: Huawei Technologies
+    email: italo.busi@huawei.com
+  -
+    name: Victor Lopez
+    org: Nokia
+    country: Spain
+    email: victor.lopez@nokia.com
+  -
+    name: Oscar Gonzalez de Dios
+    org: Telefonica
+    country: Spain
+    email: oscar.gonzalezdedios@telefonica.com
 
 normative:
 
