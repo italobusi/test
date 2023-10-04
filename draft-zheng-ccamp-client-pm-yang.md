@@ -19,7 +19,7 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
+title: "A YANG Data Model for Client Signal Performance Monitoringe"
 abbrev: "TODO - Abbreviation"
 category: info
 
