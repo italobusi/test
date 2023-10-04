@@ -174,7 +174,6 @@ module ietf-eth-service-oam {
     }
   }
 
-
   augment "/svc-pm:performance-monitoring/svc-pm:service-pm" {
     description
       "Augment with additional parameters required for Ethernet OAM";
