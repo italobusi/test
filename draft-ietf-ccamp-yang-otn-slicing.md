@@ -19,18 +19,18 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
-category: info
+title: "Framework and Data Model for OTN Network Slicing"
+abbrev: "Framework and YANG of OTN Slices"
+category: std
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-ietf-ccamp-yang-otn-slicing-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
 v: 3
 area: AREA
-workgroup: WG Working Group
+workgroup: CCAMP Working Group
 keyword:
  - next generation
  - unicorn
@@ -45,9 +45,9 @@ venue:
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Aihua Guo
+    organization: Futurewei Technologies
+    email: aihuaguo.ietf@gmail.com
 
 normative:
 
