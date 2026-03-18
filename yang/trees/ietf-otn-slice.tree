@@ -1,0 +1,152 @@
+module: ietf-otn-slice
+
+  augment /ietf-nss:network-slice-services/ietf-nss:slo-sle-templates
+            /ietf-nss:slo-sle-template/ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:slo-sle-policy/ietf-nss:custom
+            /ietf-nss:service-slo-sle-policy/ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/ns-topo:slo-sle-policy
+            /ns-topo:custom/ns-topo:service-slo-sle-policy
+            /ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/nw:node/ns-topo:slo-sle-policy
+            /ns-topo:custom/ns-topo:service-slo-sle-policy
+            /ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/nw:node/nt:termination-point
+            /ns-topo:slo-sle-policy/ns-topo:custom
+            /ns-topo:service-slo-sle-policy/ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/nt:link/ns-topo:slo-sle-policy
+            /ns-topo:custom/ns-topo:service-slo-sle-policy
+            /ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:connection-groups/ietf-nss:connection-group
+            /ietf-nss:slo-sle-policy/ietf-nss:custom
+            /ietf-nss:service-slo-sle-policy/ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:connection-groups/ietf-nss:connection-group
+            /ietf-nss:connectivity-construct/ietf-nss:slo-sle-policy
+            /ietf-nss:custom/ietf-nss:service-slo-sle-policy
+            /ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:connection-groups/ietf-nss:connection-group
+            /ietf-nss:connectivity-construct/ietf-nss:type
+            /ietf-nss:a2a/ietf-nss:a2a-sdp/ietf-nss:slo-sle-policy
+            /ietf-nss:custom/ietf-nss:service-slo-sle-policy
+            /ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+
+  grouping odu-signal-quality:
+    +-- odu-signal-quality
+       +-- odu-pm-objective* [duration pm-type]
+          +-- duration        identityref
+          +-- pm-type         identityref
+          +-- pm-threshold?   uint64
+  grouping otn-slice-slo-policy:
+    +-- otn
+       +-- odu-signal-quality
+       |  +-- odu-pm-objective* [duration pm-type]
+       |     +-- duration        identityref
+       |     +-- pm-type         identityref
+       |     +-- pm-threshold?   uint64
+       +-- otn-bandwidth
+          +-- odulist* [odu-type]
+             +-- odu-type     identityref
+             +-- number?      uint16
+             +-- ts-number?   uint16
