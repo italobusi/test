@@ -6,8 +6,24 @@
 <meta content="initial-scale=1.0" name="viewport">
 <title>Framework and Data Model for OTN Network Slicing</title>
 <meta content="Aihua Guo" name="author">
+<meta content="Luis M. Contreras" name="author">
+<meta content="Sergio Belotti" name="author">
+<meta content="Reza Rokui" name="author">
+<meta content="Yunbin Xu" name="author">
+<meta content="Yang Zhao" name="author">
+<meta content="Xufeng Liu" name="author">
 <meta content="
-       TODO Abstract 
+       The requirement of slicing network resources with desired quality of
+service is emerging at every network technology, including the
+Optical Transport Networks (OTN). As a part of the transport network,
+OTN can provide hard pipes with guaranteed data isolation and
+deterministic low latency, which are highly demanded in the Service
+Level Agreement (SLA). 
+       This document describes a framework for OTN network slicing and defines
+YANG data models with OTN technology-specific augments deployed at both
+the north and south bound of the OTN network slice controller. Additional
+YANG data model augmentations will be defined in a future version of
+this draft. 
     " name="description">
 <meta content="xml2rfc 3.32.0" name="generator">
 <meta content="next generation" name="keyword">
@@ -1050,7 +1066,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <td class="right">March 2026</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Guo</td>
+<td class="left">Guo, et al.</td>
 <td class="center">Expires 19 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
@@ -1070,11 +1086,35 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
 <dd class="expires"><time datetime="2026-09-19">19 September 2026</time></dd>
-<dt class="label-authors">Author:</dt>
+<dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
       <div class="author-name">A. Guo</div>
 <div class="org">Futurewei Technologies</div>
+</div>
+<div class="author">
+      <div class="author-name">L. M. Contreras</div>
+<div class="org">Telefonica</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Belotti</div>
+<div class="org">Nokia</div>
+</div>
+<div class="author">
+      <div class="author-name">R. Rokui</div>
+<div class="org">Ciena</div>
+</div>
+<div class="author">
+      <div class="author-name">Y. Xu</div>
+<div class="org">CAICT</div>
+</div>
+<div class="author">
+      <div class="author-name">Y. Zhao</div>
+<div class="org">China Mobile</div>
+</div>
+<div class="author">
+      <div class="author-name">X. Liu</div>
+<div class="org">Alef Edge</div>
 </div>
 </dd>
 </dl>
@@ -1082,7 +1122,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Framework and Data Model for OTN Network Slicing</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">The requirement of slicing network resources with desired quality of
+service is emerging at every network technology, including the
+Optical Transport Networks (OTN). As a part of the transport network,
+OTN can provide hard pipes with guaranteed data isolation and
+deterministic low latency, which are highly demanded in the Service
+Level Agreement (SLA).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document describes a framework for OTN network slicing and defines
+YANG data models with OTN technology-specific augments deployed at both
+the north and south bound of the OTN network slice controller. Additional
+YANG data model augmentations will be defined in a future version of
+this draft.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1149,36 +1199,109 @@ svg :is([fill="white"], [fill^="#fff"]) {
         </h2>
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
-            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-operational-considerations" class="internal xref">Operational Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.1.1"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-prefixes-in-data-node-names" class="internal xref">Prefixes in Data Node Names</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3">
+                <p id="section-toc.1-1.1.2.3.1" class="keepWithNext"><a href="#section-1.3" class="auto internal xref">1.3</a>.  <a href="#name-definition-of-otn-slice" class="internal xref">Definition of OTN Slice</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-use-cases-for-otn-network-s" class="internal xref">Use Cases for OTN Network Slicing</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-leased-line-services-with-o" class="internal xref">Leased Line Services with OTN</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-co-construction-and-sharing" class="internal xref">Co-construction and Sharing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-wholesale-of-optical-resour" class="internal xref">Wholesale of optical resources</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="auto internal xref">2.4</a>.  <a href="#name-vertical-dedicated-network-" class="internal xref">Vertical dedicated network with OTN</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5">
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-end-to-end-network-slicing" class="internal xref">End-to-end network slicing</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-framework-for-otn-slicing" class="internal xref">Framework for OTN slicing</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-realizing-otn-slices" class="internal xref">Realizing OTN Slices</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-yang-data-model-for-otn-sli" class="internal xref">YANG Data Model for OTN Slicing Configuration</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-otn-slicing-yang-model-for-" class="internal xref">OTN Slicing YANG Model for MPI</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-mpi-yang-model-overview" class="internal xref">MPI YANG Model Overview</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-mpi-yang-model-tree" class="internal xref">MPI YANG Model Tree</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
+                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="auto internal xref">5.1.3</a>.  <a href="#name-mpi-yang-code" class="internal xref">MPI YANG Code</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-otn-slicing-yang-model-for-o" class="internal xref">OTN Slicing YANG Model for OTN-SC NBI</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
+                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-nbi-yang-model-overview" class="internal xref">NBI YANG Model Overview</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.2">
+                    <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-nbi-yang-model-tree-for-otn" class="internal xref">NBI YANG Model Tree for OTN slice</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.3">
+                    <p id="section-toc.1-1.5.2.2.2.3.1"><a href="#section-5.2.3" class="auto internal xref">5.2.3</a>.  <a href="#name-nbi-yang-code-for-otn-slice" class="internal xref">NBI YANG Code for OTN Slice</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-manageability-consideration" class="internal xref">Manageability Considerations</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-operational-considerations" class="internal xref">Operational Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1189,75 +1312,1865 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO Introduction<a href="#section-1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="conventions-and-definitions">
-<section id="section-2">
-      <h2 id="name-conventions-and-definitions">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
-      </h2>
-<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+<p id="section-1-1">The requirement of slicing network resources with desired quality of
+service is emerging at every network technology, including the
+Optical Transport Networks (OTN). As a part of the transport network,
+OTN can provide hard pipes with guaranteed data isolation and
+deterministic low latency, which are highly demanded in the Service
+Level Agreement (SLA).
+This document describes a framework for OTN network slicing and defines
+YANG data models with OTN technology-specific augments deployed at both
+the north and south bound of the OTN network slice controller. Additional
+YANG data model augmentations will be defined in a future version of
+this draft.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<div id="terminology">
+<section id="section-1.1">
+        <h3 id="name-terminology">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
-appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">The terminology for describing YANG data models is found in <span>[<a href="#RFC7950" class="cite xref">RFC7950</a>]</span>.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="prefixes-in-data-node-names">
+<section id="section-1.2">
+        <h3 id="name-prefixes-in-data-node-names">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-prefixes-in-data-node-names" class="section-name selfRef">Prefixes in Data Node Names</a>
+        </h3>
+<p id="section-1.2-1">In this document, names of data nodes and other data model objects
+are prefixed using the standard prefix associated with the
+corresponding YANG imported modules, as shown in <a href="#tab-prefixes" class="auto internal xref">Table 1</a>.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<span id="name-prefixes-and-corresponding-"></span><div id="tab-prefixes">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-prefixes-and-corresponding-" class="selfRef">Prefixes and Corresponding YANG Modules</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Prefix</th>
+              <th class="text-left" rowspan="1" colspan="1">YANG Module</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">yang</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-yang-types</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC6991" class="cite xref">RFC6991</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">inet</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-inet-types</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC6991" class="cite xref">RFC6991</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">nt</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-network-topology</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8345" class="cite xref">RFC8345</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">nw</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-network-topology</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8345" class="cite xref">RFC8345</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">tet</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-te-topology</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8795" class="cite xref">RFC8795</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ietf-nss</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-network-slice-service</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCVVVV]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ns-topo</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-ns-topo</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCWWWW]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">otnt</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-otn-topology</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCYYYY]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">l1-types</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-layer1-types</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCZZZZ]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">otns</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-otn-slice</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCXXXX]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">otns-mpi</td>
+              <td class="text-left" rowspan="1" colspan="1">ietf-otn-slice-mpi</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCXXXX]</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-1.2-3">RFC Editor Note:
+Please replace VVVV with the RFC number assigned to <span>[<a href="#I-D.ietf-teas-ietf-network-slice-nbi-yang" class="cite xref">I-D.ietf-teas-ietf-network-slice-nbi-yang</a>]</span>.
+Please replace WWWW with the RFC number assigned to <span>[<a href="#I-D.ietf-teas-network-slice-topology-yang" class="cite xref">I-D.ietf-teas-network-slice-topology-yang</a>]</span>.
+Please replace XXXX with the RFC number assigned to this document.
+Please replace YYYY with the RFC number assigned to <span>[<a href="#I-D.ietf-ccamp-otn-topo-yang" class="cite xref">I-D.ietf-ccamp-otn-topo-yang</a>]</span>.
+Please replace ZZZZ with the RFC number assigned to <span>[<a href="#I-D.ietf-ccamp-layer1-types" class="cite xref">I-D.ietf-ccamp-layer1-types</a>]</span>.
+Please remove this note.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="definition-of-otn-slice">
+<section id="section-1.3">
+        <h3 id="name-definition-of-otn-slice">
+<a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-definition-of-otn-slice" class="section-name selfRef">Definition of OTN Slice</a>
+        </h3>
+<p id="section-1.3-1">An OTN slice is an an RFC 9543 Network Slice connecting a number
+of OTN endpoints using a set of shared or dedicated OTN network resources to
+satisfy specific service level objectives (SLOs) and Service Level Expectations (SLEs).<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-2">An OTN slice is a technology-specific realization of the RFC 9543 network slice service
+<span>[<a href="#RFC9543" class="cite xref">RFC9543</a>]</span> in the OTN domain, with the
+capability of configuring slice resources in the term of OTN technologies.
+Therefore, all the terms and definitions concerning network slicing as
+defined in <span>[<a href="#RFC9543" class="cite xref">RFC9543</a>]</span> apply to OTN slicing.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
+<p id="section-1.3-3">An OTN slice can span multiple OTN administrative domains, encompassing
+access links, intra-domain paths, and inter-domain links.
+An OTN slice may include multiple endpoints, each associated with a set of physical
+or logical resources, e.g. optical port or time slots, at the termination point (TP) of
+an access link or inter-domain link at an OTN provider edge (PE) equipment.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
+<p id="section-1.3-4">An end-to-end OTN slice may be composed of multiple OTN segment slices in
+a hierarchical or sequential (or stitched) combination.<a href="#section-1.3-4" class="pilcrow">¶</a></p>
+<p id="section-1.3-5"><a href="#fig-otn-slice" class="auto internal xref">Figure 1</a> illustrates the scope of OTN slices in multi-domain
+environment.<a href="#section-1.3-5" class="pilcrow">¶</a></p>
+<span id="name-otn-slice"></span><div id="fig-otn-slice">
+<figure id="figure-1">
+          <div id="section-1.3-6.1">
+            <div class="alignLeft art-svg artwork" id="section-1.3-6.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="352" width="560" viewBox="0 0 560 352" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,144 L 8,176" fill="none" stroke="black"></path>
+                <path d="M 48,144 L 48,176" fill="none" stroke="black"></path>
+                <path d="M 56,168 L 56,288" fill="none" stroke="black"></path>
+                <path d="M 64,112 L 64,224" fill="none" stroke="black"></path>
+                <path d="M 72,192 L 72,256" fill="none" stroke="black"></path>
+                <path d="M 80,128 L 80,192" fill="none" stroke="black"></path>
+                <path d="M 120,256 L 120,288" fill="none" stroke="black"></path>
+                <path d="M 128,128 L 128,192" fill="none" stroke="black"></path>
+                <path d="M 160,256 L 160,288" fill="none" stroke="black"></path>
+                <path d="M 184,128 L 184,192" fill="none" stroke="black"></path>
+                <path d="M 248,128 L 248,192" fill="none" stroke="black"></path>
+                <path d="M 256,192 L 256,256" fill="none" stroke="black"></path>
+                <path d="M 272,112 L 272,224" fill="none" stroke="black"></path>
+                <path d="M 280,168 L 280,288" fill="none" stroke="black"></path>
+                <path d="M 296,112 L 296,224" fill="none" stroke="black"></path>
+                <path d="M 312,128 L 312,192" fill="none" stroke="black"></path>
+                <path d="M 376,128 L 376,192" fill="none" stroke="black"></path>
+                <path d="M 432,128 L 432,192" fill="none" stroke="black"></path>
+                <path d="M 480,128 L 480,192" fill="none" stroke="black"></path>
+                <path d="M 488,112 L 488,224" fill="none" stroke="black"></path>
+                <path d="M 504,168 L 504,288" fill="none" stroke="black"></path>
+                <path d="M 512,144 L 512,176" fill="none" stroke="black"></path>
+                <path d="M 552,144 L 552,176" fill="none" stroke="black"></path>
+                <path d="M 56,32 L 200,32" fill="none" stroke="black"></path>
+                <path d="M 368,32 L 496,32" fill="none" stroke="black"></path>
+                <path d="M 240,64 L 264,64" fill="none" stroke="black"></path>
+                <path d="M 288,64 L 304,64" fill="none" stroke="black"></path>
+                <path d="M 480,64 L 496,64" fill="none" stroke="black"></path>
+                <path d="M 64,112 L 272,112" fill="none" stroke="black"></path>
+                <path d="M 296,112 L 488,112" fill="none" stroke="black"></path>
+                <path d="M 80,128 L 128,128" fill="none" stroke="black"></path>
+                <path d="M 184,128 L 248,128" fill="none" stroke="black"></path>
+                <path d="M 312,128 L 376,128" fill="none" stroke="black"></path>
+                <path d="M 432,128 L 472,128" fill="none" stroke="black"></path>
+                <path d="M 8,144 L 48,144" fill="none" stroke="black"></path>
+                <path d="M 512,144 L 552,144" fill="none" stroke="black"></path>
+                <path d="M 48,160 L 72,160" fill="none" stroke="black"></path>
+                <path d="M 128,160 L 144,160" fill="none" stroke="black"></path>
+                <path d="M 160,160 L 184,160" fill="none" stroke="black"></path>
+                <path d="M 256,160 L 304,160" fill="none" stroke="black"></path>
+                <path d="M 376,160 L 392,160" fill="none" stroke="black"></path>
+                <path d="M 408,160 L 432,160" fill="none" stroke="black"></path>
+                <path d="M 496,160 L 512,160" fill="none" stroke="black"></path>
+                <path d="M 8,176 L 40,176" fill="none" stroke="black"></path>
+                <path d="M 520,176 L 552,176" fill="none" stroke="black"></path>
+                <path d="M 88,192 L 128,192" fill="none" stroke="black"></path>
+                <path d="M 184,192 L 240,192" fill="none" stroke="black"></path>
+                <path d="M 312,192 L 376,192" fill="none" stroke="black"></path>
+                <path d="M 432,192 L 472,192" fill="none" stroke="black"></path>
+                <path d="M 72,224 L 264,224" fill="none" stroke="black"></path>
+                <path d="M 296,224 L 488,224" fill="none" stroke="black"></path>
+                <path d="M 72,256 L 120,256" fill="none" stroke="black"></path>
+                <path d="M 160,256 L 256,256" fill="none" stroke="black"></path>
+                <path d="M 248,160 L 256,176" fill="none" stroke="black"></path>
+                <path d="M 60,200 L 80,160" fill="none" stroke="black"></path>
+                <path d="M 472,128 C 480.83064,128 488,135.16936 488,144" fill="none" stroke="black"></path>
+                <path d="M 472,128 C 480.83064,128 488,120.83064 488,112" fill="none" stroke="black"></path>
+                <path d="M 72,160 C 63.16936,160 56,167.16936 56,176" fill="none" stroke="black"></path>
+                <path d="M 264,160 C 272.83064,160 280,167.16936 280,176" fill="none" stroke="black"></path>
+                <path d="M 496,160 C 487.16936,160 480,167.16936 480,176" fill="none" stroke="black"></path>
+                <path d="M 496,160 C 487.16936,160 480,152.83064 480,144" fill="none" stroke="black"></path>
+                <path d="M 40,176 C 48.83064,176 56,183.16936 56,192" fill="none" stroke="black"></path>
+                <path d="M 520,176 C 511.16936,176 504,183.16936 504,192" fill="none" stroke="black"></path>
+                <path d="M 88,192 C 79.16936,192 72,199.16936 72,208" fill="none" stroke="black"></path>
+                <path d="M 240,192 C 248.83064,192 256,199.16936 256,208" fill="none" stroke="black"></path>
+                <path d="M 472,192 C 480.83064,192 488,199.16936 488,208" fill="none" stroke="black"></path>
+                <path d="M 472,192 C 480.83064,192 488,184.83064 488,176" fill="none" stroke="black"></path>
+                <path d="M 72,224 C 63.16936,224 56,231.16936 56,240" fill="none" stroke="black"></path>
+                <path d="M 72,224 C 63.16936,224 56,216.83064 56,208" fill="none" stroke="black"></path>
+                <path d="M 80,224 C 71.16936,224 64,216.83064 64,208" fill="none" stroke="black"></path>
+                <path d="M 264,224 C 272.83064,224 280,231.16936 280,240" fill="none" stroke="black"></path>
+                <path d="M 264,224 C 272.83064,224 280,216.83064 280,208" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="512,288 500,282.4 500,293.6" fill="black" transform="rotate(90,504,288)"></polygon>
+                <polygon class="arrowhead" points="504,64 492,58.4 492,69.6" fill="black" transform="rotate(0,496,64)"></polygon>
+                <polygon class="arrowhead" points="504,32 492,26.4 492,37.6" fill="black" transform="rotate(0,496,32)"></polygon>
+                <polygon class="arrowhead" points="296,64 284,58.4 284,69.6" fill="black" transform="rotate(180,288,64)"></polygon>
+                <polygon class="arrowhead" points="288,288 276,282.4 276,293.6" fill="black" transform="rotate(90,280,288)"></polygon>
+                <polygon class="arrowhead" points="272,64 260,58.4 260,69.6" fill="black" transform="rotate(0,264,64)"></polygon>
+                <polygon class="arrowhead" points="168,288 156,282.4 156,293.6" fill="black" transform="rotate(90,160,288)"></polygon>
+                <polygon class="arrowhead" points="128,288 116,282.4 116,293.6" fill="black" transform="rotate(90,120,288)"></polygon>
+                <polygon class="arrowhead" points="64,288 52,282.4 52,293.6" fill="black" transform="rotate(90,56,288)"></polygon>
+                <polygon class="arrowhead" points="64,32 52,26.4 52,37.6" fill="black" transform="rotate(180,56,32)"></polygon>
+                <circle cx="80" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
+                <circle cx="248" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
+                <circle cx="312" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
+                <circle cx="480" cy="160" r="6" class="opendot" fill="white" stroke="black"></circle>
+                <g class="text">
+                  <text x="244" y="36">End-to-end</text>
+                  <text x="304" y="36">OTN</text>
+                  <text x="344" y="36">Slice</text>
+                  <text x="60" y="68">&lt;-</text>
+                  <text x="88" y="68">OTN</text>
+                  <text x="136" y="68">Segment</text>
+                  <text x="192" y="68">Slice</text>
+                  <text x="224" y="68">1</text>
+                  <text x="328" y="68">OTN</text>
+                  <text x="376" y="68">Segment</text>
+                  <text x="432" y="68">Slice</text>
+                  <text x="464" y="68">2</text>
+                  <text x="104" y="148">OTN</text>
+                  <text x="208" y="148">OTN</text>
+                  <text x="336" y="148">OTN</text>
+                  <text x="456" y="148">OTN</text>
+                  <text x="28" y="164">CE</text>
+                  <text x="100" y="164">PE</text>
+                  <text x="152" y="164">.</text>
+                  <text x="216" y="164">Borde</text>
+                  <text x="344" y="164">Borde</text>
+                  <text x="400" y="164">.</text>
+                  <text x="452" y="164">PE</text>
+                  <text x="532" y="164">CE</text>
+                  <text x="212" y="180">Node</text>
+                  <text x="340" y="180">Node</text>
+                  <text x="120" y="212">OTN</text>
+                  <text x="164" y="212">Domain</text>
+                  <text x="200" y="212">1</text>
+                  <text x="360" y="212">OTN</text>
+                  <text x="404" y="212">Domain</text>
+                  <text x="440" y="212">2</text>
+                  <text x="52" y="308">Access</text>
+                  <text x="120" y="308">OTN</text>
+                  <text x="160" y="308">Slice</text>
+                  <text x="292" y="308">Inter-domain</text>
+                  <text x="508" y="308">Access</text>
+                  <text x="44" y="324">Link</text>
+                  <text x="140" y="324">Endpoint</text>
+                  <text x="260" y="324">Link</text>
+                  <text x="500" y="324">Link</text>
+                </g>
+              </svg><a href="#section-1.3-6.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-otn-slice" class="selfRef">OTN Slice</a>
+          </figcaption></figure>
+</div>
+<p id="section-1.3-7">OTN slices may be pre-configured by the management plane and presented to
+the customer via the northbound interface (NBI), or be dynamically
+provisioned by a higher layer slice controller, e.g., an RFC 9543 network slice
+controller (NSC) through the NBI. The OTN slice is
+provided by a service provider to a customer to be used as though it was part
+of the customer's own networks.<a href="#section-1.3-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="use-cases-for-otn-network-slicing">
+<section id="section-2">
+      <h2 id="name-use-cases-for-otn-network-s">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-use-cases-for-otn-network-s" class="section-name selfRef">Use Cases for OTN Network Slicing</a>
+      </h2>
+<div id="leased-line-services-with-otn">
+<section id="section-2.1">
+        <h3 id="name-leased-line-services-with-o">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-leased-line-services-with-o" class="section-name selfRef">Leased Line Services with OTN</a>
+        </h3>
+<p id="section-2.1-1">For end business customers (like OTT or enterprises), leased lines
+have the advantage of providing high-speed connections with low
+costs. On the other hand, the traffic control of leased lines is very
+challenging due to rapid changes in service demands. Carriers are
+recommended to provide network-level slicing capabilities to meet
+this demand. Based on such capabilities, private network users have
+full control over the sliced resources which have been allocated to them
+and which could be used to support their leased lines, when needed.
+Users may formulate policies based on the demand for services and
+time to schedule the resources from the entire network's perspective
+flexibly. For example, the bandwidth between any two points may be
+established or released based on the time or monitored traffic
+characteristics. The routing and bandwidth may be adjusted at a
+specific time interval to maximize network resource utilization
+efficiency.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="co-construction-and-sharing">
+<section id="section-2.2">
+        <h3 id="name-co-construction-and-sharing">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-co-construction-and-sharing" class="section-name selfRef">Co-construction and Sharing</a>
+        </h3>
+<p id="section-2.2-1">Co-construction and sharing of a network are becoming a popular means
+among service providers to reduce networking building CAPEX. For Co-
+construction and sharing case, there are typically multiple co-
+founders for the same network. For example, one founder may provide
+optical fibres and another founder may provide OTN equipment, while
+each occupies a certain percentage of the usage rights of the network
+resources. In this scenario, the network O&amp;M is performed by a
+certain founder in each region, where the same founder usually
+deploys an independent management and control system. The other
+founders of the network use each other's management and control
+system to provision services remotely. In this scenario, different
+founders' network resources need to be automatically (associated)
+divided, isolated, and visualized. All founders may share or have
+independent O&amp;M capabilities, and should be able to perform service-
+level provisioning in their respective slices.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="wholesale-of-optical-resources">
+<section id="section-2.3">
+        <h3 id="name-wholesale-of-optical-resour">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-wholesale-of-optical-resour" class="section-name selfRef">Wholesale of optical resources</a>
+        </h3>
+<p id="section-2.3-1">In the optical resource wholesale market, smaller, local carriers and
+wireless carriers may rent resources from larger carriers, or
+infrastructure carriers instead of building their networks. Likewise,
+international carriers may rent resources from respective local
+carriers and local carriers may lease their owned networks to each
+other to achieve better network utilization efficiency.
+From the perspective of a resource provider, it is crucial that a
+network slice is timely configured to meet traffic matrix
+requirements requested by its tenants. The support for multi-tenancy
+within the resource provider's network demands that the network
+slices are qualitatively isolated from each other to meet the
+requirements for transparency, non-interference, and security.
+Typically, a resource purchaser expects to use the leased network
+resources flexibly, just like they are self-constructed. Therefore,
+the purchaser is not only provided with a network slice, but also the
+full set of functionalities for operating and maintaining the network
+slice.  The purchaser also expects to, flexibly and independently,
+schedule and maintain physical resources to support their own
+end-to-end automation using both leased and self-constructed network
+resources.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="vertical-dedicated-network-with-otn">
+<section id="section-2.4">
+        <h3 id="name-vertical-dedicated-network-">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-vertical-dedicated-network-" class="section-name selfRef">Vertical dedicated network with OTN</a>
+        </h3>
+<p id="section-2.4-1">Vertical industry slicing is an emerging category of network slicing
+due to the high demand for private high-speed network interconnects
+for industrial applications.
+In this scenario, the biggest challenge is to implement
+differentiated optical network slices based on the requirements from
+different industries. For example, in the financial industry, to
+support high-frequency transactions, the slice must ensure to provide
+the minimum latency along with the mechanism for latency management.
+For the healthcare industry, online diagnosis network and software
+capabilities to ensure the delivery of HD video without frame loss.
+For bulk data migration in data centers, the network needs to support
+on-demand, large-bandwidth allocation. In each of the aforementioned
+vertical industry scenarios, the bandwidth shall be adjusted as
+required to ensure flexible and efficient network resource usage.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="end-to-end-network-slicing">
+<section id="section-2.5">
+        <h3 id="name-end-to-end-network-slicing">
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-end-to-end-network-slicing" class="section-name selfRef">End-to-end network slicing</a>
+        </h3>
+<p id="section-2.5-1">In an end-to-end network slicing scenario such as 5G network slicing
+<span>[<a href="#TS.28.530-3GPP" class="cite xref">TS.28.530-3GPP</a>]</span>, an RFC 9543 network slice <span>[<a href="#RFC9543" class="cite xref">RFC9543</a>]</span>
+provides the required connectivity between other different segments
+of an end-to-end network slice, such as the Radio Access Network
+(RAN) and the Core Network (CN) segments, with a specific
+performance commitment. An RFC 9543 network slice could be composed of
+network slices from multiple technological and administrative
+domains. An RFC 9543 network slice can be realized by using or combining
+multiple underlying OTN slices with OTN resources, e.g., ODU time
+slots or ODU containers, to achieve end-to-end slicing across the transport
+domain.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="framework-for-otn-slicing">
+<section id="section-3">
+      <h2 id="name-framework-for-otn-slicing">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-framework-for-otn-slicing" class="section-name selfRef">Framework for OTN slicing</a>
+      </h2>
+<p id="section-3-1">OTN slices may be abstracted differently depending on the requirement contained
+in the configuration provided by the slice customer. Whereas the customer requests
+an OTN slice to provide connectivity between specified endpoints, an OTN slice
+can be abstracted as a set of endpoint-to-endpoint links, with each link formed
+by an end-to-end tunnel across the underlying OTN networks. The resources
+associated with each link of the slice are reserved and commissioned in the underlying
+physical network upon the completion of configuring the OTN slice and all the
+links are active.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">An OTN slice can also be abstracted as an abstract topology when the customer requests
+the slice to share resources between multiple endpoints and to use the resources on demand.
+The abstract topology may consist of virtual nodes and virtual links<span>[<a href="#RFC9731" class="cite xref">RFC9731</a>]</span>, and their associated
+resources are reserved but not commissioned across the underlying OTN networks. The
+customer can later commission resources within the slice dynamically using the NBI provided
+by the service provider. An OTN slice could use abstract topology to connect endpoints with
+shared resources to optimize the resource utilization, and connections can be activated
+within the slice as needed.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">It is worth noting that those means to abstract an OTN slice are similar to the Virtual
+Network (VN) abstraction defined for higher-level interfaces in <span>[<a href="#RFC8453" class="cite xref">RFC8453</a>]</span>, in which context
+a connectivity-based slice corresponds to Type 1 VN and a resource-based slice corresponds to
+Type 2 VN, respectively.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">A particular resource in an OTN network, such as a port or link, may be
+sliced with one of the two granularity levels:<a href="#section-3-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-5.1">
+          <p id="section-3-5.1.1">Link-based slicing, in which a link and its associated link
+termination points (LTPs) are dedicatedly allocated to a
+particular OTN slice.<a href="#section-3-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-5.2">
+          <p id="section-3-5.2.1">Tributary-slot based slicing, in which multiple OTN slices
+share the same link by allocating different OTN tributary slots in
+different granularities.<a href="#section-3-5.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-3-6">Furthermore, an OTN switch is typically fully non-blocking switching
+at the lowest ODU container granularity, it is
+desirable to specify just the total number of ODU containers in the
+lowest granularity (e.g. ODU0), when configuring tributary-slot based
+slicing on links and ports internal to an OTN network. In multi-domain
+OTN network scenarios where separate OTN slices are created on
+each of the OTN networks and are stitched at inter-domain OTN links, it
+is necessary to specify matching tributary slots at the endpoints of the
+inter-domain links. In some real network scenarios, OTN network resources
+including tributary slots are managed explicitly by network operators for
+network maintenance considerations. Therefore, an OTN slice controller
+shall support configuring an OTN slice with both options.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">An OTN slice controller (OTN-SC) is a logical function responsible for
+the life-cycle management of OTN slices instantiated within the
+corresponding OTN network domains. The OTN-SC provides technology-specific
+interfaces at its northbound (OTN-SC NBI) to allow a higher-layer slice
+controller, such as an RFC 9543 network slice controller (NSC) or an orchestrator,
+to request OTN slices with OTN-specific
+requirements. The OTN-SC interfaces at the southbound using the MDSC-to-PNC
+interface (MPI) with a Physical Network Controller (PNC) or Multi-Domain Service Orchestrator (MDSC),
+as defined in the ACTN control framework <span>[<a href="#RFC8453" class="cite xref">RFC8453</a>]</span>. The logical function
+within the OTN-SC is responsible for translating the OTN slice requests
+into concrete slice realization which can be understood and
+provisioned at the southbound by the PNC or MDSC.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">The presence of OTN-SC provides multiple options for a high-level slice controller
+or an orchestrator to configure and realize slicing in OTN networks, depending on
+whether a customer's slice request is technology agnostic or technology specific:<a href="#section-3-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-9.1">
+          <p id="section-3-9.1.1">Option 1[opt.1]: An IETF NSC receives a technology-agnostic slice request from the IETF NSC NBI and
+realizes full or part of the slice in OTN networks directly through MPI provided by
+the PNC or MDSC. The IETF NSC is responsible for mapping a technology-agnostic slicing request
+into an OTN technology-specific realization. In this option, the OTN-SC is not used.<a href="#section-3-9.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-9.2">
+          <p id="section-3-9.2.1">Option 2[opt.2]: An IETF NSC receives a technology-agnostic slice request from the IETF NSC NBI and delegates the
+request to the OTN-SC through the OTN-SC NBI, which is OTN technology specific. The OTN-SC in turn realizes the slice in single or multi domain OTN networks by working with the underlying PNC or MDSC. In this option, the OTN-SC is considered as a realization of IETF NSC, i.e.,
+an NS realizer as per <span>[<a href="#I-D.ietf-teas-ns-controller-models" class="cite xref">I-D.ietf-teas-ns-controller-models</a>]</span>,
+when the underlying network is OTN. The OTN-SC is also a subordinate slice controller of the RFC 9543 NSC, which
+is consistent with the hierarchical control of slices specified by <span>[<a href="#RFC9543" class="cite xref">RFC9543</a>]</span>.<a href="#section-3-9.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-9.3">
+          <p id="section-3-9.3.1">Option 3[opt.3]: An OTN-aware orchestrator may request an OTN technology-specific slice with OTN-specific SLOs through the
+OTN-SC NBI to the OTN-SC. The OTN-SC in turn realizes the slice in single or multi domain OTN networks by working with the underlying PNC or MDSC<a href="#section-3-9.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-3-10">An OTN slice may be realized by using standard MPI interfaces, control plane, network management system (NMS) or any other proprietary interfaces as needed. Examples of such interfaces include the abstract TE topology <span>[<a href="#RFC8795" class="cite xref">RFC8795</a>]</span>, TE tunnel <span>[<a href="#I-D.ietf-teas-yang-te" class="cite xref">I-D.ietf-teas-yang-te</a>]</span>,L1VPN<span>[<a href="#RFC4847" class="cite xref">RFC4847</a>]</span>, or Netconf/YANG based interfaces such as OpenConfig. Some of these interfaces, such as the TE tunnel model, are suitable for creating connectivity-based OTN slices which represent a slice as a set of TE tunnels, while other interfaces such as the TE topology model are more suitable for creating resource-based OTN slices which represent a slice as a topology.<a href="#section-3-10" class="pilcrow">¶</a></p>
+<p id="section-3-11">The OTN-SC NBI is a technology-specific interface that augments the IETF NSC NBI, which is technology-
+agnostic.<a href="#section-3-11" class="pilcrow">¶</a></p>
+<p id="section-3-12"><a href="#fig-slice-interfaces" class="auto internal xref">Figure 2</a> illustrates the OTN slicing control hierarchy, the positioning of the OTN slicing interfaces as well as the options for OTN slice configuration.<a href="#section-3-12" class="pilcrow">¶</a></p>
+<span id="name-positioning-of-otn-slicing-"></span><div id="fig-slice-interfaces">
+<figure id="figure-2">
+        <div id="section-3-13.1">
+          <div class="alignLeft art-svg artwork" id="section-3-13.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="448" width="472" viewBox="0 0 472 448" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,96 L 8,128" fill="none" stroke="black"></path>
+              <path d="M 8,240 L 8,272" fill="none" stroke="black"></path>
+              <path d="M 8,304 L 8,336" fill="none" stroke="black"></path>
+              <path d="M 112,128 L 112,240" fill="none" stroke="black"></path>
+              <path d="M 128,32 L 128,64" fill="none" stroke="black"></path>
+              <path d="M 128,368 L 128,400" fill="none" stroke="black"></path>
+              <path d="M 176,160 L 176,192" fill="none" stroke="black"></path>
+              <path d="M 200,64 L 200,96" fill="none" stroke="black"></path>
+              <path d="M 224,192 L 224,240" fill="none" stroke="black"></path>
+              <path d="M 224,272 L 224,304" fill="none" stroke="black"></path>
+              <path d="M 224,336 L 224,368" fill="none" stroke="black"></path>
+              <path d="M 296,32 L 296,64" fill="none" stroke="black"></path>
+              <path d="M 296,240 L 296,272" fill="none" stroke="black"></path>
+              <path d="M 312,368 L 312,400" fill="none" stroke="black"></path>
+              <path d="M 352,128 L 352,160" fill="none" stroke="black"></path>
+              <path d="M 352,192 L 352,304" fill="none" stroke="black"></path>
+              <path d="M 456,304 L 456,336" fill="none" stroke="black"></path>
+              <path d="M 464,96 L 464,128" fill="none" stroke="black"></path>
+              <path d="M 464,160 L 464,192" fill="none" stroke="black"></path>
+              <path d="M 128,32 L 296,32" fill="none" stroke="black"></path>
+              <path d="M 128,64 L 192,64" fill="none" stroke="black"></path>
+              <path d="M 208,64 L 296,64" fill="none" stroke="black"></path>
+              <path d="M 8,96 L 464,96" fill="none" stroke="black"></path>
+              <path d="M 8,128 L 464,128" fill="none" stroke="black"></path>
+              <path d="M 176,160 L 464,160" fill="none" stroke="black"></path>
+              <path d="M 176,192 L 464,192" fill="none" stroke="black"></path>
+              <path d="M 8,240 L 296,240" fill="none" stroke="black"></path>
+              <path d="M 8,272 L 296,272" fill="none" stroke="black"></path>
+              <path d="M 8,304 L 456,304" fill="none" stroke="black"></path>
+              <path d="M 8,336 L 456,336" fill="none" stroke="black"></path>
+              <path d="M 128,368 L 312,368" fill="none" stroke="black"></path>
+              <path d="M 128,400 L 312,400" fill="none" stroke="black"></path>
+              <g class="text">
+                <text x="180" y="52">Provider's</text>
+                <text x="244" y="52">User</text>
+                <text x="224" y="84">CMI</text>
+                <text x="140" y="116">Orchestrator</text>
+                <text x="200" y="116">/</text>
+                <text x="224" y="116">E2E</text>
+                <text x="264" y="116">Slice</text>
+                <text x="332" y="116">Controller</text>
+                <text x="392" y="148">NSC-NBI</text>
+                <text x="200" y="180">RFC</text>
+                <text x="236" y="180">9543</text>
+                <text x="288" y="180">Network</text>
+                <text x="344" y="180">Slice</text>
+                <text x="412" y="180">Controller</text>
+                <text x="144" y="212">opt.3</text>
+                <text x="256" y="212">opt.2</text>
+                <text x="384" y="212">opt.1</text>
+                <text x="148" y="228">OTN-SC</text>
+                <text x="192" y="228">NBI</text>
+                <text x="252" y="228">OTN-SC</text>
+                <text x="296" y="228">NBI</text>
+                <text x="156" y="260">OTN-SC</text>
+                <text x="248" y="292">MPI</text>
+                <text x="376" y="292">MPI</text>
+                <text x="224" y="324">PNC</text>
+                <text x="248" y="356">SBI</text>
+                <text x="144" y="388">OTN</text>
+                <text x="196" y="388">Physical</text>
+                <text x="264" y="388">Network</text>
+              </g>
+            </svg><a href="#section-3-13.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-positioning-of-otn-slicing-" class="selfRef">Positioning of OTN Slicing Interfaces</a>
+        </figcaption></figure>
+</div>
+<p id="section-3-14">OTN-SC functionalities may be recursive such that a higher-level
+OTN-SC may designate the creation of OTN slices to a lower-level
+OTN-SC in a recursive manner. This scenario may apply to the
+creation of OTN slices in multi-domain OTN networks, where
+multiple domain-wide OTN slices provisioned by lower-layer
+OTN-SCs are stitched to support a multi-domain OTN slice
+provisioned by the higher-level OTN-SC.  Alternatively, the OTN-SC
+may interface with an MDSC, which in turn interfaces with multiple
+PNCs through the MPI to realize OTN slices in multi-domain OTN networks
+without OTN-SC recursion.
+<a href="#fig-otn-sc-recursion" class="auto internal xref">Figure 3</a> illustrates both options for OTN slicing
+in multi-domain.<a href="#section-3-14" class="pilcrow">¶</a></p>
+<span id="name-otn-sc-for-multi-domain"></span><div id="fig-otn-sc-recursion">
+<figure id="figure-3">
+        <div id="section-3-15.1">
+          <div class="alignLeft art-svg artwork" id="section-3-15.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="504" viewBox="0 0 504 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
+              <path d="M 8,96 L 8,128" fill="none" stroke="black"></path>
+              <path d="M 8,160 L 8,192" fill="none" stroke="black"></path>
+              <path d="M 40,128 L 40,160" fill="none" stroke="black"></path>
+              <path d="M 80,64 L 80,96" fill="none" stroke="black"></path>
+              <path d="M 80,160 L 80,192" fill="none" stroke="black"></path>
+              <path d="M 96,160 L 96,192" fill="none" stroke="black"></path>
+              <path d="M 128,128 L 128,160" fill="none" stroke="black"></path>
+              <path d="M 168,32 L 168,64" fill="none" stroke="black"></path>
+              <path d="M 168,96 L 168,128" fill="none" stroke="black"></path>
+              <path d="M 168,160 L 168,192" fill="none" stroke="black"></path>
+              <path d="M 336,32 L 336,64" fill="none" stroke="black"></path>
+              <path d="M 336,96 L 336,128" fill="none" stroke="black"></path>
+              <path d="M 336,160 L 336,192" fill="none" stroke="black"></path>
+              <path d="M 368,64 L 368,96" fill="none" stroke="black"></path>
+              <path d="M 368,128 L 368,160" fill="none" stroke="black"></path>
+              <path d="M 408,96 L 408,128" fill="none" stroke="black"></path>
+              <path d="M 408,160 L 408,192" fill="none" stroke="black"></path>
+              <path d="M 424,96 L 424,128" fill="none" stroke="black"></path>
+              <path d="M 424,160 L 424,192" fill="none" stroke="black"></path>
+              <path d="M 456,64 L 456,96" fill="none" stroke="black"></path>
+              <path d="M 456,128 L 456,160" fill="none" stroke="black"></path>
+              <path d="M 496,32 L 496,64" fill="none" stroke="black"></path>
+              <path d="M 496,96 L 496,128" fill="none" stroke="black"></path>
+              <path d="M 496,160 L 496,192" fill="none" stroke="black"></path>
+              <path d="M 8,32 L 168,32" fill="none" stroke="black"></path>
+              <path d="M 336,32 L 496,32" fill="none" stroke="black"></path>
+              <path d="M 8,64 L 72,64" fill="none" stroke="black"></path>
+              <path d="M 88,64 L 168,64" fill="none" stroke="black"></path>
+              <path d="M 336,64 L 360,64" fill="none" stroke="black"></path>
+              <path d="M 376,64 L 448,64" fill="none" stroke="black"></path>
+              <path d="M 464,64 L 496,64" fill="none" stroke="black"></path>
+              <path d="M 8,96 L 72,96" fill="none" stroke="black"></path>
+              <path d="M 88,96 L 168,96" fill="none" stroke="black"></path>
+              <path d="M 336,96 L 360,96" fill="none" stroke="black"></path>
+              <path d="M 376,96 L 408,96" fill="none" stroke="black"></path>
+              <path d="M 424,96 L 448,96" fill="none" stroke="black"></path>
+              <path d="M 464,96 L 496,96" fill="none" stroke="black"></path>
+              <path d="M 8,128 L 32,128" fill="none" stroke="black"></path>
+              <path d="M 48,128 L 120,128" fill="none" stroke="black"></path>
+              <path d="M 136,128 L 168,128" fill="none" stroke="black"></path>
+              <path d="M 336,128 L 360,128" fill="none" stroke="black"></path>
+              <path d="M 376,128 L 408,128" fill="none" stroke="black"></path>
+              <path d="M 424,128 L 448,128" fill="none" stroke="black"></path>
+              <path d="M 464,128 L 496,128" fill="none" stroke="black"></path>
+              <path d="M 8,160 L 32,160" fill="none" stroke="black"></path>
+              <path d="M 48,160 L 80,160" fill="none" stroke="black"></path>
+              <path d="M 96,160 L 120,160" fill="none" stroke="black"></path>
+              <path d="M 136,160 L 168,160" fill="none" stroke="black"></path>
+              <path d="M 336,160 L 360,160" fill="none" stroke="black"></path>
+              <path d="M 376,160 L 408,160" fill="none" stroke="black"></path>
+              <path d="M 424,160 L 448,160" fill="none" stroke="black"></path>
+              <path d="M 464,160 L 496,160" fill="none" stroke="black"></path>
+              <path d="M 8,192 L 80,192" fill="none" stroke="black"></path>
+              <path d="M 96,192 L 168,192" fill="none" stroke="black"></path>
+              <path d="M 336,192 L 408,192" fill="none" stroke="black"></path>
+              <path d="M 424,192 L 496,192" fill="none" stroke="black"></path>
+              <g class="text">
+                <text x="84" y="52">OTN-SC</text>
+                <text x="412" y="52">OTN-SC</text>
+                <text x="96" y="84">MPI</text>
+                <text x="396" y="84">OTN-SC</text>
+                <text x="440" y="84">NBI</text>
+                <text x="76" y="116">MDSC</text>
+                <text x="372" y="116">OTN-SC</text>
+                <text x="460" y="116">OTN-SC</text>
+                <text x="56" y="148">MPI</text>
+                <text x="144" y="148">MPI</text>
+                <text x="384" y="148">MPI</text>
+                <text x="472" y="148">MPI</text>
+                <text x="48" y="180">PNC</text>
+                <text x="136" y="180">PNC</text>
+                <text x="376" y="180">PNC</text>
+                <text x="464" y="180">PNC</text>
+                <text x="52" y="212">Multi-domain</text>
+                <text x="132" y="212">Option</text>
+                <text x="168" y="212">1</text>
+                <text x="380" y="212">Multi-domain</text>
+                <text x="460" y="212">Option</text>
+                <text x="496" y="212">2</text>
+              </g>
+            </svg><a href="#section-3-15.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-otn-sc-for-multi-domain" class="selfRef">OTN-SC for multi-domain</a>
+        </figcaption></figure>
+</div>
+<p id="section-3-16">OTN-SC functionalities are logically independent and may be deployed in
+different combinations to cater to the realization needs. In reference to the
+ACTN control framework <span>[<a href="#RFC8453" class="cite xref">RFC8453</a>]</span>, an OTN-SC may be deployed<a href="#section-3-16" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-17.1">
+          <p id="section-3-17.1.1">as an independent network function;<a href="#section-3-17.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-17.2">
+          <p id="section-3-17.2.1">together with a Physical Network Controller (PNC) for single-domain
+or with a Multi-Domain Service Orchestrator (MDSC)for multi-domain;<a href="#section-3-17.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-17.3">
+          <p id="section-3-17.3.1">together with a higher-level network slice controller to support
+end-to-end network slicing;<a href="#section-3-17.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="realizing-otn-slices">
+<section id="section-4">
+      <h2 id="name-realizing-otn-slices">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-realizing-otn-slices" class="section-name selfRef">Realizing OTN Slices</a>
+      </h2>
+<p id="section-4-1"><span>[<a href="#RFC9543" class="cite xref">RFC9543</a>]</span> introduces a mechanism for an RFC 9543 network slice controller to realize network slices by constructing Network Resource Partitions (NRP). A NRP is a collection of resources identified in the underlay network to facilitate the mapping of network slices onto available network resources. An NRP is a scope view of a topology and may be considered as a topology in its own right. Thus, in traffic-engineered (TE) networks including OTN, an NRP may be simply represented as an abstract TE topology defined by <span>[<a href="#RFC8795" class="cite xref">RFC8795</a>]</span>. For OTN networks, An NRP may be represented as an abstract OTN topology defined by <span>[<a href="#I-D.ietf-ccamp-otn-topo-yang" class="cite xref">I-D.ietf-ccamp-otn-topo-yang</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">The NRP can be used to address scalability challenges that arise when network slices are mapped directly onto the underlay topology, where a large number of control-plane and data-plane states may otherwise need to be instantiated and maintained for each slice. An NRP is internal to the network slice controller, and its use is optional and particularly in OTN transport networks, where resources are already physically partitioned into time slots with corarse granularity than the resources considered in L2-L3 networks. Nevertheless, NRPs can provide significant benefits for slice realization in large-scale environments, including also OTN networks.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">For connectivity-based OTN slices, a connection within an OTN slice is typically realized by an OTN tunnel in the underlay topology and resources are reserved by the tunnel, thus use of NRP is optional in this case.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">For resource-based OTN slices, the OTN-SC maps an OTN slice directly onto the underlay TE topology exposed by the subtended controller (MDSC or PNC) without creating separate NRP topology instances. In this case, the OTN-SC configures NRP identifiers on the relevant underlay link resources. An NRP identifier represents a resource partition with ODU time slots for tracking slice resource associations. The OTN-SC may then push the topology with configured NRP identifiers to the subtended MDSC or PNC using the MPI model defined in this draft, and subsequently instantiate OTN TE tunnels utilizing the related underlay link resources with the appropriate NRP identifier.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">Multiple OTN slices may be mapped to the same NRP, while any individual connectivity construct of a slice is mapped to only one NRP, as specified in <span>[<a href="#RFC9543" class="cite xref">RFC9543</a>]</span>. The resources of an NRP topology are reserved and shared among all OTN slices mapped to the same NRP.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-6"><a href="#fig-otn-sc-nrp" class="auto internal xref">Figure 4</a> illustrates the relationship between OTN slices and NRPs. In this example, Slice 1 and Slice 2 are associated with NRP-1, while Slice 3 is associated with NRP-2. The relevant link resources allocated to each NRP are marked with their corresponding NRP identifiers.<a href="#section-4-6" class="pilcrow">¶</a></p>
+<span id="name-mapping-otn-slices-to-nrp"></span><div id="fig-otn-sc-nrp">
+<figure id="figure-4">
+        <div id="section-4-7.1">
+          <div class="alignLeft art-svg artwork" id="section-4-7.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="560" width="496" viewBox="0 0 496 560" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,192 L 8,448" fill="none" stroke="black"></path>
+              <path d="M 8,496 L 8,544" fill="none" stroke="black"></path>
+              <path d="M 120,136 L 120,192" fill="none" stroke="black"></path>
+              <path d="M 136,176 L 136,192" fill="none" stroke="black"></path>
+              <path d="M 144,456 L 144,496" fill="none" stroke="black"></path>
+              <path d="M 352,456 L 352,488" fill="none" stroke="black"></path>
+              <path d="M 400,144 L 400,192" fill="none" stroke="black"></path>
+              <path d="M 472,192 L 472,448" fill="none" stroke="black"></path>
+              <path d="M 472,496 L 472,544" fill="none" stroke="black"></path>
+              <path d="M 80,32 L 192,32" fill="none" stroke="black"></path>
+              <path d="M 368,32 L 480,32" fill="none" stroke="black"></path>
+              <path d="M 112,64 L 128,64" fill="none" stroke="black"></path>
+              <path d="M 192,64 L 208,64" fill="none" stroke="black"></path>
+              <path d="M 24,144 L 112,144" fill="none" stroke="black"></path>
+              <path d="M 312,144 L 392,144" fill="none" stroke="black"></path>
+              <path d="M 408,144 L 424,144" fill="none" stroke="black"></path>
+              <path d="M 40,176 L 104,176" fill="none" stroke="black"></path>
+              <path d="M 8,192 L 112,192" fill="none" stroke="black"></path>
+              <path d="M 144,192 L 392,192" fill="none" stroke="black"></path>
+              <path d="M 408,192 L 472,192" fill="none" stroke="black"></path>
+              <path d="M 128,240 L 352,240" fill="none" stroke="black"></path>
+              <path d="M 168,272 L 248,272" fill="none" stroke="black"></path>
+              <path d="M 128,288 L 144,288" fill="none" stroke="black"></path>
+              <path d="M 136,336 L 176,336" fill="none" stroke="black"></path>
+              <path d="M 40,416 L 264,416" fill="none" stroke="black"></path>
+              <path d="M 8,448 L 472,448" fill="none" stroke="black"></path>
+              <path d="M 8,496 L 136,496" fill="none" stroke="black"></path>
+              <path d="M 152,496 L 472,496" fill="none" stroke="black"></path>
+              <path d="M 8,544 L 472,544" fill="none" stroke="black"></path>
+              <path d="M 116,312 L 128,336" fill="none" stroke="black"></path>
+              <path d="M 160,288 L 184,336" fill="none" stroke="black"></path>
+              <path d="M 104,80 L 112,96" fill="none" stroke="black"></path>
+              <path d="M 16,144 L 72,32" fill="none" stroke="black"></path>
+              <path d="M 28,184 L 44,152" fill="none" stroke="black"></path>
+              <path d="M 144,144 L 200,32" fill="none" stroke="black"></path>
+              <path d="M 32,416 L 120,240" fill="none" stroke="black"></path>
+              <path d="M 156,184 L 216,64" fill="none" stroke="black"></path>
+              <path d="M 112,320 L 124,296" fill="none" stroke="black"></path>
+              <path d="M 304,144 L 360,32" fill="none" stroke="black"></path>
+              <path d="M 228,344 L 256,288" fill="none" stroke="black"></path>
+              <path d="M 272,416 L 360,240" fill="none" stroke="black"></path>
+              <path d="M 432,144 L 488,32" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="408,192 396,186.4 396,197.6" fill="black" transform="rotate(90,400,192)"></polygon>
+              <polygon class="arrowhead" points="360,456 348,450.4 348,461.6" fill="black" transform="rotate(270,352,456)"></polygon>
+              <polygon class="arrowhead" points="152,496 140,490.4 140,501.6" fill="black" transform="rotate(90,144,496)"></polygon>
+              <polygon class="arrowhead" points="144,192 132,186.4 132,197.6" fill="black" transform="rotate(90,136,192)"></polygon>
+              <polygon class="arrowhead" points="128,192 116,186.4 116,197.6" fill="black" transform="rotate(90,120,192)"></polygon>
+              <g class="text">
+                <text x="92" y="52">--</text>
+                <text x="148" y="52">--</text>
+                <text x="380" y="52">--</text>
+                <text x="436" y="52">--</text>
+                <text x="92" y="68">|N1|</text>
+                <text x="148" y="68">|N3|</text>
+                <text x="380" y="68">|N1|</text>
+                <text x="436" y="68">|N3|</text>
+                <text x="92" y="84">--</text>
+                <text x="148" y="84">--</text>
+                <text x="380" y="84">--</text>
+                <text x="436" y="84">--</text>
+                <text x="124" y="100">--</text>
+                <text x="392" y="100">\</text>
+                <text x="416" y="100">--/</text>
+                <text x="124" y="116">|N2|</text>
+                <text x="412" y="116">|N2|</text>
+                <text x="56" y="132">Slice</text>
+                <text x="88" y="132">1</text>
+                <text x="124" y="132">--</text>
+                <text x="344" y="132">Slice</text>
+                <text x="376" y="132">3</text>
+                <text x="412" y="132">--</text>
+                <text x="132" y="148">--</text>
+                <text x="72" y="164">Slice</text>
+                <text x="104" y="164">2</text>
+                <text x="128" y="180">-</text>
+                <text x="148" y="180">--</text>
+                <text x="128" y="196">-</text>
+                <text x="120" y="212">(NRP-1)</text>
+                <text x="400" y="212">(NRP-2)</text>
+                <text x="140" y="260">/--\</text>
+                <text x="208" y="260">NRP-1</text>
+                <text x="276" y="260">/--\</text>
+                <text x="132" y="276">|NE1</text>
+                <text x="160" y="276">|</text>
+                <text x="268" y="276">|NE2</text>
+                <text x="296" y="276">|</text>
+                <text x="152" y="292">/</text>
+                <text x="276" y="292">\--/</text>
+                <text x="192" y="308">NRP-1</text>
+                <text x="272" y="308">NRP-2</text>
+                <text x="100" y="324">/-</text>
+                <text x="204" y="324">/--\</text>
+                <text x="100" y="340">|NE3</text>
+                <text x="200" y="340">NE4</text>
+                <text x="224" y="340">|</text>
+                <text x="108" y="356">\--/</text>
+                <text x="160" y="356">NRP-2</text>
+                <text x="204" y="356">\--/</text>
+                <text x="92" y="388">Underlay</text>
+                <text x="144" y="388">OTN</text>
+                <text x="172" y="388">TE</text>
+                <text x="220" y="388">Topology</text>
+                <text x="76" y="404">with</text>
+                <text x="112" y="404">NRP</text>
+                <text x="172" y="404">identifier</text>
+                <text x="248" y="404">marking</text>
+                <text x="212" y="436">OTN-SC</text>
+                <text x="160" y="484">MPI</text>
+                <text x="368" y="484">MPI</text>
+                <text x="208" y="532">OTN</text>
+                <text x="260" y="532">MDSC/PNC</text>
+              </g>
+            </svg><a href="#section-4-7.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<a href="#name-mapping-otn-slices-to-nrp" class="selfRef">Mapping OTN Slices to NRP</a>
+        </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="yang-data-model-for-otn-slicing-configuration">
+<section id="section-5">
+      <h2 id="name-yang-data-model-for-otn-sli">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-yang-data-model-for-otn-sli" class="section-name selfRef">YANG Data Model for OTN Slicing Configuration</a>
+      </h2>
+<div id="otn-slicing-yang-model-for-mpi">
+<section id="section-5.1">
+        <h3 id="name-otn-slicing-yang-model-for-">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-otn-slicing-yang-model-for-" class="section-name selfRef">OTN Slicing YANG Model for MPI</a>
+        </h3>
+<div id="mpi-yang-model-overview">
+<section id="section-5.1.1">
+          <h4 id="name-mpi-yang-model-overview">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-mpi-yang-model-overview" class="section-name selfRef">MPI YANG Model Overview</a>
+          </h4>
+<p id="section-5.1.1-1">For the realization of connectivity-based OTN slices, the OTN-SC configures an OTN tunnel using the OTN tunnel model and specifies the associated NRP identifier.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-2">For the realization of resource-based OTN slices, the OTN-SC configures the NRP by marking the relevant link resources on the TE topology received from the MDSC or PNC with an NRP identifier, together with the appropriate OTN-specific resource attributes, such as the number of ODU time slots or the type and quantity of ODU containers.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">Based on the resources marked by the OTN-SC, the MDSC or PNC updates the underlay TE topology by creating new TE links corresponding to the reserved OTN resources and keeping those resources booked for the slice.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mpi-yang-model-tree">
+<section id="section-5.1.2">
+          <h4 id="name-mpi-yang-model-tree">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-mpi-yang-model-tree" class="section-name selfRef">MPI YANG Model Tree</a>
+          </h4>
+<span id="name-otn-slicing-mpi-tree-diagra"></span><div id="fig-otn-slice-mpi-tree">
+<figure id="figure-5">
+            <div class="alignLeft art-text artwork" id="section-5.1.2-1.1">
+<pre>
+module: ietf-otn-slice-mpi
+
+  augment /nw:networks/nw:network/nt:link/tet:te
+            /tet:te-link-attributes:
+    +--rw (otn-nrp-granularity)?
+       +--:(link)
+       |  +--rw nrp-id?   uint32
+       +--:(link-resource)
+          +--rw nrps* [nrp-id]
+             +--rw nrp-id                       uint32
+             +--rw (technology)?
+                +--:(otn)
+                   +--rw (nrp-bandwidth)?
+                      +--:(containers)
+                      |  +--rw otn-bandwidth
+                      |     +--rw odulist* [odu-type]
+                      |        +--rw odu-type     identityref
+                      |        +--rw number?      uint16
+                      |        +--rw ts-number?   uint16
+                      +--:(time-slots)
+                         +--rw otn-ts-num?      uint32
+
+  grouping otn-nrp-profile:
+    +-- (otn-nrp-granularity)?
+       +--:(link)
+       |  +-- nrp-id?   uint32
+       +--:(link-resource)
+          +-- nrps* [nrp-id]
+             +-- nrp-id                       uint32
+             +-- (technology)?
+                +--:(otn)
+                   +-- (nrp-bandwidth)?
+                      +--:(containers)
+                      |  +-- otn-bandwidth
+                      |     +-- odulist* [odu-type]
+                      |        +-- odu-type     identityref
+                      |        +-- number?      uint16
+                      |        +-- ts-number?   uint16
+                      +--:(time-slots)
+                         +-- otn-ts-num?      uint32
+</pre>
+</div>
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<a href="#name-otn-slicing-mpi-tree-diagra" class="selfRef">OTN slicing MPI tree diagram</a>
+            </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="mpi-yang-code">
+<section id="section-5.1.3">
+          <h4 id="name-mpi-yang-code">
+<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-mpi-yang-code" class="section-name selfRef">MPI YANG Code</a>
+          </h4>
+<span id="name-otn-slicing-mpi-yang-model"></span><div id="fig-otn-slice-mpi-yang">
+<figure id="figure-6">
+            <div class="breakable lang-yang sourcecode" id="section-5.1.3-1.1">
+<pre>&lt;CODE BEGINS&gt; file "ietf-otn-slice-mpi@2025-07-03.yang"
+
+   module ietf-otn-slice-mpi {
+     yang-version 1.1;
+     namespace "urn:ietf:params:xml:ns:yang:ietf-otn-slice-mpi";
+     prefix "otns-mpi";
+
+     import ietf-network {
+       prefix "nw";
+       reference
+         "RFC 8345: A YANG Data Model for Network Topologies";
+     }
+
+     import ietf-network-topology {
+       prefix "nt";
+       reference
+         "RFC 8345: A YANG Data Model for Network Topologies";
+     }
+
+     import ietf-te-topology {
+       prefix "tet";
+       reference
+         "RFC8795: YANG Data Model for Traffic Engineering
+         (TE) Topologies";
+     }
+
+     import ietf-otn-topology {
+       prefix "otnt";
+       reference
+         "draft-ietf-ccamp-otn-topo-yang-20:
+          RFC YYYY: A YANG Data Model for Optical Transport
+          Network Topology";
+     }
+
+     import ietf-layer1-types {
+       prefix "l1-types";
+       reference
+         "draft-ietf-ccamp-layer1-types-18:
+          RFC ZZZZ: A YANG Data Model for Layer 1 Types";
+     }
+
+     organization
+       "IETF CCAMP Working Group";
+     contact
+       "WG Web: &lt;http://tools.ietf.org/wg/ccamp/&gt;
+        WG List: &lt;mailto:ccamp@ietf.org&gt;
+
+        Editor: Haomian Zheng
+                &lt;mailto:zhenghaomian@huawei.com&gt;
+
+        Editor: Italo Busi
+                &lt;mailto:italo.busi@huawei.com&gt;
+
+        Editor: Aihua Guo
+                &lt;mailto:aihuaguo.ietf@gmail.com&gt;
+
+        Editor: Sergio Belotti
+                &lt;mailto:sergio.belotti@nokia.com&gt;";
+
+     description
+       "This module defines a YANG data model for network slice
+        realization in Optical Transport Networks (OTN).
+
+        The model fully conforms to the Network Management Datastore
+        Architecture (NMDA).
+
+        Copyright (c) 2022 IETF Trust and the persons identified as
+        authors of the code.  All rights reserved.
+
+        Redistribution and use in source and binary forms, with or
+        without modification, is permitted pursuant to, and subject
+        to the license terms contained in, the Revised BSD License
+        set forth in Section 4.c of the IETF Trust's Legal Provisions
+        Relating to IETF Documents
+        (https://trustee.ietf.org/license-info).
+
+        This version of this YANG module is part of RFC XXXX; see the
+        RFC itself for full legal notices.";
+
+     revision "2025-07-03" {
+       description
+         "Latest revision of MPI YANG model for OTN slicing.";
+       reference
+         "draft-ietf-ccamp-yang-otn-slicing-09: Framework and Data
+          Model for OTN Network Slicing";
+     }
+
+     /*
+      * Groupings
+      */
+
+     grouping otn-nrp-profile {
+       description
+         "Profile of an OTN link Network Resource Partition (NRP).";
+       choice otn-nrp-granularity {
+         default "link";
+         description
+           "Link nrp granularity.";
+         case link {
+           leaf nrp-id {
+             type uint32;
+              description
+                "NRP identifier";
+           }
+         }
+         case link-resource {
+           list nrps {
+             key nrp-id;
+             description
+               "List of NRPs.";
+             leaf nrp-id {
+               type uint32;
+               description
+                 "NRP link resource identifier.";
+             }
+             choice technology {
+               description
+                 "Data plane technology types.";
+               case otn {
+                 choice nrp-bandwidth {
+                   description
+                     "Bandwidth specification for an OTN NRP.";
+                   case containers {
+                     uses l1-types:otn-link-bandwidth;
+                   }
+                   case time-slots {
+                     leaf otn-ts-num {
+                       type uint32;
+                       description
+                         "Number of OTN tributary slots allocated
+                          for the NRP.";
+                     }
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+
+     /*
+      * Augments
+      */
+     augment "/nw:networks/nw:network/nt:link/tet:te/"
+           + "tet:te-link-attributes" {
+       when "../../../nw:network-types/tet:te-topology/"
+          + "otnt:otn-topology" {
+         description
+           "Augmentation parameters apply only for networks with
+            OTN topology type.";
+       }
+       description
+         "Augment OTN TE link attributes with NRP profile.";
+       uses otn-nrp-profile;
+     }
+   }
+
+&lt;CODE ENDS&gt;</pre>
+</div>
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<a href="#name-otn-slicing-mpi-yang-model" class="selfRef">OTN slicing MPI YANG model</a>
+            </figcaption></figure>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="otn-slicing-yang-model-for-otn-sc-nbi">
+<section id="section-5.2">
+        <h3 id="name-otn-slicing-yang-model-for-o">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-otn-slicing-yang-model-for-o" class="section-name selfRef">OTN Slicing YANG Model for OTN-SC NBI</a>
+        </h3>
+<div id="nbi-yang-model-overview">
+<section id="section-5.2.1">
+          <h4 id="name-nbi-yang-model-overview">
+<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-nbi-yang-model-overview" class="section-name selfRef">NBI YANG Model Overview</a>
+          </h4>
+<p id="section-5.2.1-1">The YANG model for OTN-SC NBI is OTN-technology specific, but shares many
+common constructs and attributes with the common network slicing YANG model
+defined in <span>[<a href="#I-D.ietf-teas-ietf-network-slice-nbi-yang" class="cite xref">I-D.ietf-teas-ietf-network-slice-nbi-yang</a>]</span>. Furthermore, the
+OTN-SC NBI YANG is expected to support both connectivity-based
+and resource-based slice configuration, which is likely a common requirement for
+supporting slicing at other transport network layers, e.g. WDM or MPLS(-TP).<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-2">The OTN slicing model augments the common network slicing YANG model by extending
+OTN technology-specific SLO and SLE attributes which can be requested by OTN-aware
+customers and allows the customer to specify desired OTN signal quality.
+These attributes include:<a href="#section-5.2.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2.1-3.1">
+              <p id="section-5.2.1-3.1.1">The performance objective for Optical Data Unit (ODU) containers as defined in
+<span>[<a href="#ITU-T-G.8201-Amd.1" class="cite xref">ITU-T-G.8201-Amd.1</a>]</span>.<a href="#section-5.2.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5.2.1-3.2">
+              <p id="section-5.2.1-3.2.1">Bandwidth specification in the type and number of ODU containers.<a href="#section-5.2.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="nbi-yang-model-tree-for-otn-slice">
+<section id="section-5.2.2">
+          <h4 id="name-nbi-yang-model-tree-for-otn">
+<a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-nbi-yang-model-tree-for-otn" class="section-name selfRef">NBI YANG Model Tree for OTN slice</a>
+          </h4>
+<span id="name-tree-diagram-for-otn-slice"></span><div id="fig-ietf-otn-slice">
+<figure id="figure-7">
+            <div class="alignLeft art-text artwork" id="section-5.2.2-1.1">
+<pre>
+module: ietf-otn-slice
+
+  augment /ietf-nss:network-slice-services/ietf-nss:slo-sle-templates
+            /ietf-nss:slo-sle-template/ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:slo-sle-policy/ietf-nss:custom
+            /ietf-nss:service-slo-sle-policy/ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/ns-topo:slo-sle-policy
+            /ns-topo:custom/ns-topo:service-slo-sle-policy
+            /ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/nw:node/ns-topo:slo-sle-policy
+            /ns-topo:custom/ns-topo:service-slo-sle-policy
+            /ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/nw:node/nt:termination-point
+            /ns-topo:slo-sle-policy/ns-topo:custom
+            /ns-topo:service-slo-sle-policy/ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /nw:networks/nw:network/nt:link/ns-topo:slo-sle-policy
+            /ns-topo:custom/ns-topo:service-slo-sle-policy
+            /ns-topo:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:connection-groups/ietf-nss:connection-group
+            /ietf-nss:slo-sle-policy/ietf-nss:custom
+            /ietf-nss:service-slo-sle-policy/ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:connection-groups/ietf-nss:connection-group
+            /ietf-nss:connectivity-construct/ietf-nss:slo-sle-policy
+            /ietf-nss:custom/ietf-nss:service-slo-sle-policy
+            /ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+  augment /ietf-nss:network-slice-services/ietf-nss:slice-service
+            /ietf-nss:connection-groups/ietf-nss:connection-group
+            /ietf-nss:connectivity-construct/ietf-nss:type
+            /ietf-nss:a2a/ietf-nss:a2a-sdp/ietf-nss:slo-sle-policy
+            /ietf-nss:custom/ietf-nss:service-slo-sle-policy
+            /ietf-nss:slo-policy:
+    +--rw otn
+       +--rw odu-signal-quality
+       |  +--rw odu-pm-objective* [duration pm-type]
+       |     +--rw duration        identityref
+       |     +--rw pm-type         identityref
+       |     +--rw pm-threshold?   uint64
+       +--rw otn-bandwidth
+          +--rw odulist* [odu-type]
+             +--rw odu-type     identityref
+             +--rw number?      uint16
+             +--rw ts-number?   uint16
+
+  grouping odu-signal-quality:
+    +-- odu-signal-quality
+       +-- odu-pm-objective* [duration pm-type]
+          +-- duration        identityref
+          +-- pm-type         identityref
+          +-- pm-threshold?   uint64
+  grouping otn-slice-slo-policy:
+    +-- otn
+       +-- odu-signal-quality
+       |  +-- odu-pm-objective* [duration pm-type]
+       |     +-- duration        identityref
+       |     +-- pm-type         identityref
+       |     +-- pm-threshold?   uint64
+       +-- otn-bandwidth
+          +-- odulist* [odu-type]
+             +-- odu-type     identityref
+             +-- number?      uint16
+             +-- ts-number?   uint16
+</pre>
+</div>
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<a href="#name-tree-diagram-for-otn-slice" class="selfRef">Tree diagram for OTN slice</a>
+            </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="nbi-yang-code-for-otn-slice">
+<section id="section-5.2.3">
+          <h4 id="name-nbi-yang-code-for-otn-slice">
+<a href="#section-5.2.3" class="section-number selfRef">5.2.3. </a><a href="#name-nbi-yang-code-for-otn-slice" class="section-name selfRef">NBI YANG Code for OTN Slice</a>
+          </h4>
+<span id="name-yang-model-for-transport-ne"></span><div id="fig-ietf-otn-slice-yang">
+<figure id="figure-8">
+            <div class="breakable lang-yang sourcecode" id="section-5.2.3-1.1">
+<pre>&lt;CODE BEGINS&gt; file "ietf-otn-slice@2026-03-18.yang"
+
+   module ietf-otn-slice {
+     yang-version 1.1;
+     namespace
+       "urn:ietf:params:xml:ns:yang:ietf-otn-slice";
+     prefix "otns";
+
+     import ietf-network {
+       prefix "nw";
+       reference
+         "RFC 8345: A YANG Data Model for Network Topologies";
+     }
+     import ietf-network-topology {
+       prefix "nt";
+       reference
+         "RFC 8345: A YANG Data Model for Network Topologies";
+     }
+
+     import ietf-layer1-types {
+       prefix "l1-types";
+       reference
+         "draft-ietf-ccamp-layer1-types-18:
+          RFC ZZZZ: A YANG Data Model for Layer 1 Types";
+     }
+
+     import ietf-network-slice-service {
+       prefix "ietf-nss";
+       reference
+         "draft-ietf-teas-ietf-network-slice-nbi-yang-25:
+          RFC VVVV: A YANG Data Model for the RFC 9543 Network Slice
+          Service";
+     }
+
+     import ietf-ns-topo {
+       prefix "ns-topo";
+       reference
+         "draft-ietf-teas-network-slice-topology-yang-01:
+          RFC WWWW: IETF Network Slice Topology YANG Data Model";
+     }
+
+     organization
+       "IETF CCAMP Working Group";
+     contact
+       "WG Web: &lt;http://tools.ietf.org/wg/ccamp/&gt;
+        WG List: &lt;mailto:ccamp@ietf.org&gt;
+
+        Editor: Haomian Zheng
+                &lt;mailto:zhenghaomian@huawei.com&gt;
+
+        Editor: Italo Busi
+                &lt;mailto:italo.busi@huawei.com&gt;
+
+        Editor: Aihua Guo
+                &lt;mailto:aihuaguo.ietf@gmail.com&gt;
+
+        Editor: Sergio Belotti
+                &lt;mailto:sergio.belotti@nokia.com&gt;";
+
+     description
+       "This module defines a YANG data model for configuring
+        technology-specific network slices in optical transport
+        networks, e.g., Optical Transport Network (OTN).
+
+        Copyright (c) 2026 IETF Trust and the persons identified as
+        authors of the code.  All rights reserved.
+
+        Redistribution and use in source and binary forms, with or
+        without modification, is permitted pursuant to, and subject
+        to the license terms contained in, the Revised BSD License
+        set forth in Section 4.c of the IETF Trust's Legal Provisions
+        Relating to IETF Documents
+        (https://trustee.ietf.org/license-info).
+
+        This version of this YANG module is part of RFC XXXX; see the
+        RFC itself for full legal notices.";
+
+     revision "2026-03-18" {
+       description
+         "Latest revision of NBI YANG model for OTN slicing.";
+       reference
+         "draft-ietf-ccamp-yang-otn-slicing-09: Framework and Data
+          Model for OTN Network Slicing";
+     }
+
+
+     /*
+      * Identities
+      */
+     identity bit-error-rate {
+       base ietf-nss:service-slo-metric-type;
+       description
+         "ODU bit error rate";
+     }
+
+     identity odu-tca-threshold-type {
+       description
+         "Base identity for ODU performance counter";
+     }
+
+     identity odu-bbe {
+       base odu-tca-threshold-type;
+       description
+         "ODU Background Block Error (BBE) threshold";
+     }
+
+     identity odu-es {
+       base odu-tca-threshold-type;
+       description
+         "ODU Errored Seconds (ES) threshold";
+     }
+
+     identity odu-ses {
+       base odu-tca-threshold-type;
+       description
+         "ODU Severely Errored Seconds (SES) threshold";
+     }
+
+     identity odu-uas {
+       base odu-tca-threshold-type;
+       description
+         "ODU Unavailable Seconds (UAS) threshold";
+     }
+
+     identity odu-ber {
+       base odu-tca-threshold-type;
+       description
+         "ODU Bit Error Rate (BER) threshold";
+     }
+
+     identity pm-duration {
+       description
+         "Base identity for ODU performance monitoring interval";
+     }
+
+     identity pm-15m {
+       base pm-duration;
+       description
+         "15 minuites pm duration";
+     }
+
+     identity pm-24h {
+       base pm-duration;
+       description
+         "24 hours pm duration";
+     }
+
+     /*
+      * Groupings
+      */
+     grouping odu-signal-quality {
+       description
+         "Grouping for ODU signal quality.";
+
+       container odu-signal-quality {
+         description
+           "Contianer for ODU signal quality attributes.";
+
+         list odu-pm-objective {
+           key "duration pm-type";
+           description
+             "List of ODU performance requirements.";
+           leaf duration {
+             type identityref {
+               base pm-duration;
+             }
+             description
+               "Time duration.";
+           }
+           leaf pm-type {
+             type identityref {
+               base odu-tca-threshold-type;
+             }
+             description
+               "ODU PM metric type.";
+           }
+
+           leaf pm-threshold {
+             type uint64;
+             description
+               "ODU PM metric threshold.";
+           }
+         }
+       }
+     }
+
+     grouping otn-slice-slo-policy {
+       description
+         "Policy grouping for OTN network slices.";
+
+       container otn {
+         description
+           "OTN technology-specific SLO/SLE policy container";
+
+         uses odu-signal-quality;
+         uses l1-types:otn-link-bandwidth;
+       }
+     }
+
+     /*
+      * Augmented data nodes
+      */
+     /* slice template */
+     augment "/ietf-nss:network-slice-services" +
+             "/ietf-nss:slo-sle-templates" +
+             "/ietf-nss:slo-sle-template" +
+             "/ietf-nss:slo-policy" {
+       description
+          "Augment IETF network slice service templates with
+           OTN technology-specific SLO/SLE policy attributes.";
+
+       uses otn-slice-slo-policy;
+     }
+
+     /* slice augments */
+     augment "/ietf-nss:network-slice-services" +
+             "/ietf-nss:slice-service" +
+             "/ietf-nss:slo-sle-policy" +
+             "/ietf-nss:custom" +
+             "/ietf-nss:service-slo-sle-policy" +
+             "/ietf-nss:slo-policy" {
+       description
+         "Augment IETF network slice services to include technology-
+          specific SLO/SLE policy for connectivity-based OTN
+          slices.";
+
+       uses otn-slice-slo-policy;
+     }
+
+     /* network topology augments */
+     augment "/nw:networks/nw:network" +
+             "/ns-topo:slo-sle-policy" +
+             "/ns-topo:custom" +
+             "/ns-topo:service-slo-sle-policy" +
+             "/ns-topo:slo-policy" {
+       when "../../nw:network-types/ns-topo:network-slice" {
+         description "Augment only for Network Slice topology.";
+       }
+       description "Augment topology configuration and state.";
+       uses otn-slice-slo-policy;
+     }
+
+     /* network node augments */
+     augment "/nw:networks/nw:network/nw:node" +
+             "/ns-topo:slo-sle-policy" +
+             "/ns-topo:custom" +
+             "/ns-topo:service-slo-sle-policy" +
+             "/ns-topo:slo-policy" {
+       when "../../../nw:network-types/ns-topo:network-slice" {
+         description "Augment only for Network Slice topology.";
+       }
+       description "Augment node configuration and state.";
+       uses otn-slice-slo-policy;
+     }
+
+     /* network node's termination point augments */
+     augment "/nw:networks/nw:network/nw:node" +
+             "/nt:termination-point" +
+             "/ns-topo:slo-sle-policy" +
+             "/ns-topo:custom" +
+             "/ns-topo:service-slo-sle-policy" +
+             "/ns-topo:slo-policy" {
+       when "../../../../nw:network-types/ns-topo:network-slice" {
+         description "Augment only for Network Slice topology.";
+       }
+       description "Augment node configuration and state.";
+
+       uses otn-slice-slo-policy;
+     }
+
+     /* network link augments */
+     augment "/nw:networks/nw:network/nt:link" +
+             "/ns-topo:slo-sle-policy" +
+             "/ns-topo:custom" +
+             "/ns-topo:service-slo-sle-policy" +
+             "/ns-topo:slo-policy" {
+       when "../../../nw:network-types/ns-topo:network-slice" {
+         description "Augment only for Network Slice topology.";
+       }
+       description "Augment link configuration and state.";
+       uses otn-slice-slo-policy;
+     }
+
+     /* connectivity construct augments */
+     augment "/ietf-nss:network-slice-services" +
+             "/ietf-nss:slice-service" +
+             "/ietf-nss:connection-groups" +
+             "/ietf-nss:connection-group" +
+             "/ietf-nss:slo-sle-policy" +
+             "/ietf-nss:custom" +
+             "/ietf-nss:service-slo-sle-policy" +
+             "/ietf-nss:slo-policy" {
+       description
+         "Augment IETF network slice services to include technology-
+          specific SLO/SLE policy for connection groups within
+          a connectivity-based transport network slice.";
+       uses otn-slice-slo-policy;
+     }
+
+     augment "/ietf-nss:network-slice-services" +
+             "/ietf-nss:slice-service" +
+             "/ietf-nss:connection-groups" +
+             "/ietf-nss:connection-group" +
+             "/ietf-nss:connectivity-construct" +
+             "/ietf-nss:slo-sle-policy" +
+             "/ietf-nss:custom" +
+             "/ietf-nss:service-slo-sle-policy" +
+             "/ietf-nss:slo-policy" {
+       description
+         "Augment IETF network slice services to include technology-
+          specific SLO/SLE policy for connectivity-constructs within
+          a connectivity-based transport network slice.";
+       uses otn-slice-slo-policy;
+     }
+
+     augment "/ietf-nss:network-slice-services" +
+             "/ietf-nss:slice-service" +
+             "/ietf-nss:connection-groups" +
+             "/ietf-nss:connection-group" +
+             "/ietf-nss:connectivity-construct" +
+             "/ietf-nss:type" +
+             "/ietf-nss:a2a" +
+             "/ietf-nss:a2a-sdp" +
+             "/ietf-nss:slo-sle-policy" +
+             "/ietf-nss:custom" +
+             "/ietf-nss:service-slo-sle-policy" +
+             "/ietf-nss:slo-policy" {
+       description
+         "Augment IETF network slice services to include technology-
+          specific SLO/SLE policy for a2a connectivity-constructs
+          within a connectivity-based transport network slice.";
+       uses otn-slice-slo-policy;
+     }
+   }
+
+
+&lt;CODE ENDS&gt;</pre>
+</div>
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<a href="#name-yang-model-for-transport-ne" class="selfRef">YANG model for transport network slice</a>
+            </figcaption></figure>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="manageability-considerations">
+<section id="section-6">
+      <h2 id="name-manageability-consideration">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-manageability-consideration" class="section-name selfRef">Manageability Considerations</a>
+      </h2>
+<p id="section-6-1">To ensure the security and controllability of physical resource
+isolation, slice-based independent operation and management are
+required to achieve management isolation.
+Each optical slice typically requires dedicated accounts,
+permissions, and resources for independent access and O&amp;M. This
+mechanism is to guarantee the information isolation among slice
+tenants and to avoid resource conflicts. The access to slice
+management functions will only be permitted after successful security
+checks.<a href="#section-6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="operational-considerations">
-<section id="section-3">
+<section id="section-7">
       <h2 id="name-operational-considerations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-operational-considerations" class="section-name selfRef">Operational Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-operational-considerations" class="section-name selfRef">Operational Considerations</a>
       </h2>
-<p id="section-3-1">TBC per <span>[<a href="#I-D.opsarea-rfc5706bis" class="cite xref">I-D.opsarea-rfc5706bis</a>]</span>.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">TBC per <span>[<a href="#I-D.opsarea-rfc5706bis" class="cite xref">I-D.opsarea-rfc5706bis</a>]</span>: Manageability Considerations?<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-4">
+<section id="section-8">
       <h2 id="name-security-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-4-1">TODO Security<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">The YANG module specified in this document defines a schema for data
+that is designed to be accessed via network management protocols such
+as NETCONF <span>[<a href="#RFC6241" class="cite xref">RFC6241</a>]</span> or RESTCONF <span>[<a href="#RFC8040" class="cite xref">RFC8040</a>]</span>.  The lowest NETCONF layer
+is the secure transport layer, and the mandatory-to-implement secure
+transport is Secure Shell (SSH) <span>[<a href="#RFC6242" class="cite xref">RFC6242</a>]</span>.  The lowest RESTCONF layer
+is HTTPS, and the mandatory-to-implement secure transport is TLS
+<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">The NETCONF access control model <span>[<a href="#RFC8341" class="cite xref">RFC8341</a>]</span> provides the means to
+restrict access for particular NETCONF or RESTCONF users to a
+preconfigured subset of all available NETCONF or RESTCONF protocol
+operations and content.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3">There are a number of data nodes defined in this YANG module that are
+writable/creatable/deletable (i.e., config true, which is the
+default).  These data nodes may be considered sensitive or vulnerable
+in some network environments.  Write operations (e.g., edit-config)
+to these data nodes without proper protection can have a negative
+effect on network operations.  Considerations in Section 8 of
+<span>[<a href="#RFC8795" class="cite xref">RFC8795</a>]</span> are also applicable to their subtrees in the module defined
+in this document.<a href="#section-8-3" class="pilcrow">¶</a></p>
+<p id="section-8-4">Some of the readable data nodes in this YANG module may be considered
+sensitive or vulnerable in some network environments.  It is thus
+important to control read access (e.g., via get, get-config, or
+notification) to these data nodes.  Considerations in Section 8 of
+<span>[<a href="#RFC8795" class="cite xref">RFC8795</a>]</span> are also applicable to their subtrees in the module defined
+in this document.<a href="#section-8-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-5">
+<section id="section-9">
       <h2 id="name-iana-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-5-1">This document has no IANA actions.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">It is proposed to IANA to assign new URIs from the "IETF XML
+Registry" <span>[<a href="#RFC3688" class="cite xref">RFC3688</a>]</span> as follows:<a href="#section-9-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9-2">
+<pre>
+   URI: urn:ietf:params:xml:ns:yang:ietf-otn-slice
+   Registrant Contact: The IESG
+   XML: N/A; the requested URI is an XML namespace.
+
+   URI: urn:ietf:params:xml:ns:yang:ietf-otn-slice-mpi
+   Registrant Contact: The IESG
+   XML: N/A; the requested URI is an XML namespace.
+</pre><a href="#section-9-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9-3">This document registers two YANG modules in the YANG Module Names
+registry <span>[<a href="#RFC6020" class="cite xref">RFC6020</a>]</span>.<a href="#section-9-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9-4">
+<pre>
+   name: ietf-otn-slice
+   namespace: urn:ietf:params:xml:ns:yang:ietf-otn-slice
+   prefix: otns
+   reference: RFC XXXX
+
+   name: ietf-otn-slice-mpi
+   namespace: urn:ietf:params:xml:ns:yang:ietf-otn-slice-mpi
+   prefix: otns-mpi
+   reference: RFC XXXX
+</pre><a href="#section-9-4" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-6">
+<section id="section-10">
       <h2 id="name-references">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-6.1">
+<section id="section-10.1">
         <h3 id="name-normative-references">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.ietf-ccamp-layer1-types">[I-D.ietf-ccamp-layer1-types]</dt>
+        <dd>
+<span class="refAuthor">Zheng, H.</span> and <span class="refAuthor">I. Busi</span>, <span class="refTitle">"Common YANG Data Types for Layer 1 Networks"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ccamp-layer1-types-18</span>, <time datetime="2024-02-23" class="refDate">23 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ccamp-layer1-types-18">https://datatracker.ietf.org/doc/html/draft-ietf-ccamp-layer1-types-18</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-ccamp-otn-topo-yang">[I-D.ietf-ccamp-otn-topo-yang]</dt>
+        <dd>
+<span class="refAuthor">Zheng, H.</span>, <span class="refAuthor">Busi, I.</span>, <span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Belotti, S.</span>, and <span class="refAuthor">O. G. de Dios</span>, <span class="refTitle">"A YANG Data Model for Optical Transport Network Topology"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ccamp-otn-topo-yang-20</span>, <time datetime="2024-11-07" class="refDate">7 November 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ccamp-otn-topo-yang-20">https://datatracker.ietf.org/doc/html/draft-ietf-ccamp-otn-topo-yang-20</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-teas-ietf-network-slice-nbi-yang">[I-D.ietf-teas-ietf-network-slice-nbi-yang]</dt>
+        <dd>
+<span class="refAuthor">Wu, B.</span>, <span class="refAuthor">Dhody, D.</span>, <span class="refAuthor">Rokui, R.</span>, <span class="refAuthor">Saad, T.</span>, and <span class="refAuthor">J. Mullooly</span>, <span class="refTitle">"A YANG Data Model for the RFC 9543 Network Slice Service"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teas-ietf-network-slice-nbi-yang-25</span>, <time datetime="2025-05-09" class="refDate">9 May 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-teas-ietf-network-slice-nbi-yang-25">https://datatracker.ietf.org/doc/html/draft-ietf-teas-ietf-network-slice-nbi-yang-25</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-teas-network-slice-topology-yang">[I-D.ietf-teas-network-slice-topology-yang]</dt>
+        <dd>
+<span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Contreras, L. M.</span>, <span class="refAuthor">Belotti, S.</span>, <span class="refAuthor">Guo, A.</span>, and <span class="refAuthor">I. Busi</span>, <span class="refTitle">"IETF Network Slice Topology YANG Data Model"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teas-network-slice-topology-yang-03</span>, <time datetime="2026-01-23" class="refDate">23 January 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-teas-network-slice-topology-yang-03">https://datatracker.ietf.org/doc/html/draft-ietf-teas-network-slice-topology-yang-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-teas-ns-controller-models">[I-D.ietf-teas-ns-controller-models]</dt>
+        <dd>
+<span class="refAuthor">Contreras, L. M.</span>, <span class="refAuthor">Rokui, R.</span>, <span class="refAuthor">Tantsura, J.</span>, <span class="refAuthor">Wu, B.</span>, and <span class="refAuthor">X. Liu</span>, <span class="refTitle">"IETF Network Slice Controller and its Associated Data Models"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teas-ns-controller-models-06</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-teas-ns-controller-models-06">https://datatracker.ietf.org/doc/html/draft-ietf-teas-ns-controller-models-06</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-teas-yang-te">[I-D.ietf-teas-yang-te]</dt>
+        <dd>
+<span class="refAuthor">Saad, T.</span>, <span class="refAuthor">Gandhi, R.</span>, <span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Beeram, V. P.</span>, and <span class="refAuthor">I. Bryskin</span>, <span class="refTitle">"A YANG Data Model for Traffic Engineering Tunnels, Label Switched Paths, and Interfaces"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-teas-yang-te-43</span>, <time datetime="2026-02-28" class="refDate">28 February 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-teas-yang-te-43">https://datatracker.ietf.org/doc/html/draft-ietf-teas-yang-te-43</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC3688">[RFC3688]</dt>
+        <dd>
+<span class="refAuthor">Mealling, M.</span>, <span class="refTitle">"The IETF XML Registry"</span>, <span class="seriesInfo">BCP 81</span>, <span class="seriesInfo">RFC 3688</span>, <span class="seriesInfo">DOI 10.17487/RFC3688</span>, <time datetime="2004-01" class="refDate">January 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3688">https://www.rfc-editor.org/rfc/rfc3688</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4847">[RFC4847]</dt>
+        <dd>
+<span class="refAuthor">Takeda, T., Ed.</span>, <span class="refTitle">"Framework and Requirements for Layer 1 Virtual Private Networks"</span>, <span class="seriesInfo">RFC 4847</span>, <span class="seriesInfo">DOI 10.17487/RFC4847</span>, <time datetime="2007-04" class="refDate">April 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4847">https://www.rfc-editor.org/rfc/rfc4847</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6020">[RFC6020]</dt>
+        <dd>
+<span class="refAuthor">Bjorklund, M., Ed.</span>, <span class="refTitle">"YANG - A Data Modeling Language for the Network Configuration Protocol (NETCONF)"</span>, <span class="seriesInfo">RFC 6020</span>, <span class="seriesInfo">DOI 10.17487/RFC6020</span>, <time datetime="2010-10" class="refDate">October 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6020">https://www.rfc-editor.org/rfc/rfc6020</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6241">[RFC6241]</dt>
+        <dd>
+<span class="refAuthor">Enns, R., Ed.</span>, <span class="refAuthor">Bjorklund, M., Ed.</span>, <span class="refAuthor">Schoenwaelder, J., Ed.</span>, and <span class="refAuthor">A. Bierman, Ed.</span>, <span class="refTitle">"Network Configuration Protocol (NETCONF)"</span>, <span class="seriesInfo">RFC 6241</span>, <span class="seriesInfo">DOI 10.17487/RFC6241</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6241">https://www.rfc-editor.org/rfc/rfc6241</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6242">[RFC6242]</dt>
+        <dd>
+<span class="refAuthor">Wasserman, M.</span>, <span class="refTitle">"Using the NETCONF Protocol over Secure Shell (SSH)"</span>, <span class="seriesInfo">RFC 6242</span>, <span class="seriesInfo">DOI 10.17487/RFC6242</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6242">https://www.rfc-editor.org/rfc/rfc6242</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6991">[RFC6991]</dt>
+        <dd>
+<span class="refAuthor">Schoenwaelder, J., Ed.</span>, <span class="refTitle">"Common YANG Data Types"</span>, <span class="seriesInfo">RFC 6991</span>, <span class="seriesInfo">DOI 10.17487/RFC6991</span>, <time datetime="2013-07" class="refDate">July 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6991">https://www.rfc-editor.org/rfc/rfc6991</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7950">[RFC7950]</dt>
+        <dd>
+<span class="refAuthor">Bjorklund, M., Ed.</span>, <span class="refTitle">"The YANG 1.1 Data Modeling Language"</span>, <span class="seriesInfo">RFC 7950</span>, <span class="seriesInfo">DOI 10.17487/RFC7950</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7950">https://www.rfc-editor.org/rfc/rfc7950</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8040">[RFC8040]</dt>
+        <dd>
+<span class="refAuthor">Bierman, A.</span>, <span class="refAuthor">Bjorklund, M.</span>, and <span class="refAuthor">K. Watsen</span>, <span class="refTitle">"RESTCONF Protocol"</span>, <span class="seriesInfo">RFC 8040</span>, <span class="seriesInfo">DOI 10.17487/RFC8040</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8040">https://www.rfc-editor.org/rfc/rfc8040</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8341">[RFC8341]</dt>
+        <dd>
+<span class="refAuthor">Bierman, A.</span> and <span class="refAuthor">M. Bjorklund</span>, <span class="refTitle">"Network Configuration Access Control Model"</span>, <span class="seriesInfo">STD 91</span>, <span class="seriesInfo">RFC 8341</span>, <span class="seriesInfo">DOI 10.17487/RFC8341</span>, <time datetime="2018-03" class="refDate">March 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8341">https://www.rfc-editor.org/rfc/rfc8341</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8345">[RFC8345]</dt>
+        <dd>
+<span class="refAuthor">Clemm, A.</span>, <span class="refAuthor">Medved, J.</span>, <span class="refAuthor">Varga, R.</span>, <span class="refAuthor">Bahadur, N.</span>, <span class="refAuthor">Ananthakrishnan, H.</span>, and <span class="refAuthor">X. Liu</span>, <span class="refTitle">"A YANG Data Model for Network Topologies"</span>, <span class="seriesInfo">RFC 8345</span>, <span class="seriesInfo">DOI 10.17487/RFC8345</span>, <time datetime="2018-03" class="refDate">March 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8345">https://www.rfc-editor.org/rfc/rfc8345</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8446">[RFC8446]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8453">[RFC8453]</dt>
+        <dd>
+<span class="refAuthor">Ceccarelli, D., Ed.</span> and <span class="refAuthor">Y. Lee, Ed.</span>, <span class="refTitle">"Framework for Abstraction and Control of TE Networks (ACTN)"</span>, <span class="seriesInfo">RFC 8453</span>, <span class="seriesInfo">DOI 10.17487/RFC8453</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8453">https://www.rfc-editor.org/rfc/rfc8453</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8795">[RFC8795]</dt>
+        <dd>
+<span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Bryskin, I.</span>, <span class="refAuthor">Beeram, V.</span>, <span class="refAuthor">Saad, T.</span>, <span class="refAuthor">Shah, H.</span>, and <span class="refAuthor">O. Gonzalez de Dios</span>, <span class="refTitle">"YANG Data Model for Traffic Engineering (TE) Topologies"</span>, <span class="seriesInfo">RFC 8795</span>, <span class="seriesInfo">DOI 10.17487/RFC8795</span>, <time datetime="2020-08" class="refDate">August 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8795">https://www.rfc-editor.org/rfc/rfc8795</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9731">[RFC9731]</dt>
+      <dd>
+<span class="refAuthor">Lee, Y., Ed.</span>, <span class="refAuthor">Dhody, D., Ed.</span>, <span class="refAuthor">Ceccarelli, D.</span>, <span class="refAuthor">Bryskin, I.</span>, and <span class="refAuthor">B. Yoon</span>, <span class="refTitle">"A YANG Data Model for Virtual Network (VN) Operations"</span>, <span class="seriesInfo">RFC 9731</span>, <span class="seriesInfo">DOI 10.17487/RFC9731</span>, <time datetime="2025-03" class="refDate">March 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9731">https://www.rfc-editor.org/rfc/rfc9731</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-6.2">
+<section id="section-10.2">
         <h3 id="name-informative-references">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.opsarea-rfc5706bis">[I-D.opsarea-rfc5706bis]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Claise, B.</span>, <span class="refAuthor">Clarke, J.</span>, <span class="refAuthor">Farrel, A.</span>, <span class="refAuthor">Barguil, S.</span>, <span class="refAuthor">Pignataro, C.</span>, and <span class="refAuthor">R. Chen</span>, <span class="refTitle">"Guidelines for Considering Operations and Management in IETF Specifications"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-opsarea-rfc5706bis-06</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-opsarea-rfc5706bis-06">https://datatracker.ietf.org/doc/html/draft-opsarea-rfc5706bis-06</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ITU-T-G.8201-Amd.1">[ITU-T-G.8201-Amd.1]</dt>
+        <dd>
+<span class="refAuthor">ITU Telecommunication Standardization Sector (ITU-T)</span>, <span class="refTitle">"Error performance parameters and objectives for multi-operator international paths within optical transport networks (Amendment 1)"</span>, <span class="seriesInfo">ITU-T G.8201 (2011) Amd. 1 </span>, <time datetime="2021-12" class="refDate">December 2021</time>, <span>&lt;<a href="https://www.itu.int/rec/T-REC-G.8201">https://www.itu.int/rec/T-REC-G.8201</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9543">[RFC9543]</dt>
+        <dd>
+<span class="refAuthor">Farrel, A., Ed.</span>, <span class="refAuthor">Drake, J., Ed.</span>, <span class="refAuthor">Rokui, R.</span>, <span class="refAuthor">Homma, S.</span>, <span class="refAuthor">Makhijani, K.</span>, <span class="refAuthor">Contreras, L.</span>, and <span class="refAuthor">J. Tantsura</span>, <span class="refTitle">"A Framework for Network Slices in Networks Built from IETF Technologies"</span>, <span class="seriesInfo">RFC 9543</span>, <span class="seriesInfo">DOI 10.17487/RFC9543</span>, <time datetime="2024-03" class="refDate">March 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9543">https://www.rfc-editor.org/rfc/rfc9543</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="TS.28.530-3GPP">[TS.28.530-3GPP]</dt>
+      <dd>
+<span class="refAuthor">3rd Generation Partnership Project (3GPP)</span>, <span class="refTitle">"3GPP TS 28.530 V15.1.0 Technical Specification Group Services and System Aspects; Management and orchestration; Concepts, use cases and requirements (Release 15)"</span>, <span class="seriesInfo">3GPP TS 28.530 </span>, <time datetime="2018-12" class="refDate">December 2018</time>, <span>&lt;<a href="http://ftp.3gpp.org//Specs/archive/28_series/28.530/28530-f10.zip">http://ftp.3gpp.org//Specs/archive/28_series/28.530/28530-f10.zip</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1269,13 +3182,83 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">This document was prepared using kramdown.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Previous versions of this document were prepared using 2-Word-v2.0.template.dot.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<p id="appendix-A-3">The authors would like to thank Adrian Farrel, Danielle Ceccarelli,
+Igor Bryskin, Bo Wu, Gyan Mishra, Joel M. Halpen, Dhruv Dhoddy and Loa Andersson
+for providing valuable insights.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="contributors">
+<section id="appendix-B">
+      <h2 id="name-contributors">
+<a href="#name-contributors" class="section-name selfRef">Contributors</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Haomian Zheng</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies</span></div>
+<div dir="auto" class="left"><span class="street-address">H1, Xiliu Beipo Village, Songshan Lake</span></div>
+<div dir="auto" class="left"><span class="locality">Dongguan</span></div>
+<div dir="auto" class="left"><span class="country-name">China</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:zhenghaomian@huawei.com" class="email">zhenghaomian@huawei.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Italo Busi</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:italo.busi@huawei.com" class="email">italo.busi@huawei.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Oscar Gonzalez de Dios</span></div>
+<div dir="auto" class="left"><span class="org">Telefonica</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:oscar.gonzalezdedios@telefonica.com" class="email">oscar.gonzalezdedios@telefonica.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Victor Lopez</span></div>
+<div dir="auto" class="left"><span class="org">Nokia</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:victor.lopez@nokia.com" class="email">victor.lopez@nokia.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Dieter Beller</span></div>
+<div dir="auto" class="left"><span class="org">Nokia</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:Dieter.Beller@nokia.com" class="email">Dieter.Beller@nokia.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Henry Yu</span></div>
+<div dir="auto" class="left"><span class="org">Huawei Technologies Canada</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:henry.yu@huawei.com" class="email">henry.yu@huawei.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Jiang Sun</span></div>
+<div dir="auto" class="left"><span class="org">China Mobile</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:sunjiang@chinamobile.com" class="email">sunjiang@chinamobile.com</a>
+</div>
+</address>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-B">
-      <h2 id="name-authors-address">
-<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Aihua Guo</span></div>
@@ -1283,6 +3266,54 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <div class="email">
 <span>Email:</span>
 <a href="mailto:aihuaguo.ietf@gmail.com" class="email">aihuaguo.ietf@gmail.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Luis M. Contreras</span></div>
+<div dir="auto" class="left"><span class="org">Telefonica</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:luismiguel.contrerasmurillo@telefonica.com" class="email">luismiguel.contrerasmurillo@telefonica.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Sergio Belotti</span></div>
+<div dir="auto" class="left"><span class="org">Nokia</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:Sergio.belotti@nokia.com" class="email">Sergio.belotti@nokia.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Reza Rokui</span></div>
+<div dir="auto" class="left"><span class="org">Ciena</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:rrokui@ciena.com" class="email">rrokui@ciena.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Yunbin Xu</span></div>
+<div dir="auto" class="left"><span class="org">CAICT</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:xuyunbin@caict.ca.cn" class="email">xuyunbin@caict.ca.cn</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Yang Zhao</span></div>
+<div dir="auto" class="left"><span class="org">China Mobile</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:zhaoyangyjy@chinamobile.com" class="email">zhaoyangyjy@chinamobile.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Xufeng Liu</span></div>
+<div dir="auto" class="left"><span class="org">Alef Edge</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:xufeng.liu.ietf@gmail.com" class="email">xufeng.liu.ietf@gmail.com</a>
 </div>
 </address>
 </section>
