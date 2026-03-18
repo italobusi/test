@@ -4,8 +4,8 @@
 
 Common Control and Measurement Plane                              A. Guo
 Internet-Draft                                    Futurewei Technologies
-Intended status: Standards Track                           17 March 2026
-Expires: 18 September 2026
+Intended status: Standards Track                           18 March 2026
+Expires: 19 September 2026
 
 
             Framework and Data Model for OTN Network Slicing
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 September 2026.
+   This Internet-Draft will expire on 19 September 2026.
 
 Copyright Notice
 
